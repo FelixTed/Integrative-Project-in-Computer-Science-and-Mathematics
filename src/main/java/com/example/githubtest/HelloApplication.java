@@ -13,7 +13,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         StackPane pane = new StackPane();
-        Circle circle = new Circle(50);
+        Rectangle circle = new Rectangle(50);
         pane.getChildren().add(circle);
         Scene scene = new Scene(pane, 320, 240);
         stage.setTitle("Hello!");
