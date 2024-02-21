@@ -43,7 +43,7 @@ public class Stone extends Circle implements Runnable {
         EventHandler calculateMovement = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                //ADD MOVEMENT HANDLING
+                //ADD MOVEMENT HANDLING HERE
             }
 
         };
