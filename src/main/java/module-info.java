@@ -3,6 +3,6 @@ module com.example.githubtest {
     requires javafx.fxml;
 
 
-    opens com.example.githubtest to javafx.fxml;
-    exports com.example.githubtest;
+    opens com.example.IntegrativeProject to javafx.fxml;
+    exports com.example.IntegrativeProject;
 }
