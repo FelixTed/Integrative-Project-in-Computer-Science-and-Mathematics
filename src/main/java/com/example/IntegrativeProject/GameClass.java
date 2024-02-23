@@ -22,9 +22,15 @@ import java.io.IOException;
 public class GameClass extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+        Stone[] stones1 = new Stone[3];
+        Stone[] stones2 = new Stone[3];
         Pane pane = new Pane();
-        Circle stone1 = new Circle(100,400,50);
-        Image stoneImg = new Image("stone.png");
+        Stone stone1 = new Stone();
+        stone1.setCenterX(100);
+        stone1.setCenterY(400);
+
+
+        stone1.startMoving(150,25,stones1,stones2,stone1);
 
         Image backGroundIm = new Image("gameBackground.jpg");
         BackgroundImage bGIMG = new BackgroundImage(backGroundIm, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
@@ -32,11 +38,7 @@ public class GameClass extends Application {
         Background background = new Background(bGIMG);
 
         pane.setBackground(background);
-        ImageView stoneView = new ImageView(stoneImg);
-        stoneView.setFitWidth(101);
-        stoneView.setFitHeight(97);
-        stoneView.setTranslateX(50);
-        stoneView.setTranslateY(350);
+
 
         Circle wholeInner = new Circle(1200 ,400,30);
         Circle insideInner = new Circle(1200,400,15);
@@ -84,7 +86,7 @@ public class GameClass extends Application {
 
         Line normal = new Line(150,400,250,400);
         normal.getStrokeDashArray().addAll(4d);
-        pane.getChildren().addAll(innerRect,stone1,stoneView,donut1,donut2,donut3,hBox,Turn,normal);
+        pane.getChildren().addAll(innerRect,donut1,donut2,donut3,Turn,normal,stone1,hBox);
 
 
         Scene scene = new Scene( pane,1440,720);

@@ -128,7 +128,7 @@ private void launchGameApplication(String appType){
     Pane newPane = new Pane();
     if(appType == "game") {
         Circle stone1 = new Circle(100, 400, 50);
-        Image stoneImg = new Image("C:/Users/Dell/Pictures/stone.png");
+        Image stoneImg = new Image("C:/Users/Dell/Pictures/blueStone.png");
 
         Image backGroundIm = new Image("C:/Users/Dell/Pictures/gameBackground.jpg");
         BackgroundImage bGIMG = new BackgroundImage(backGroundIm, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
