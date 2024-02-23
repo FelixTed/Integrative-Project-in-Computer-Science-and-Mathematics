@@ -29,7 +29,7 @@ public class GameClass extends Application {
         stone1.setCenterX(100);
         stone1.setCenterY(400);
 
-
+        //Test case
         stone1.startMoving(150,25,stones1,stones2,stone1);
 
         Image backGroundIm = new Image("gameBackground.jpg");
