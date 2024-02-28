@@ -94,7 +94,6 @@ public class Board extends Application {
 
         });
 
-
         Scene scene = new Scene( pane,1440,720);
         stage.setTitle("Hello!");
         stage.setScene(scene);
