@@ -1,6 +1,8 @@
 package com.example.IntegrativeProject;
 
 import javafx.application.Application;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -25,7 +27,8 @@ public class Board extends Application {
     private Button launchButton = new Button("Launch");
     private  Line angleLine = new Line(150,380,250,380);
     private Target target = new Target(new Circle(1100,380,40),new Circle(1100,380,100),new Circle(1100,380,180));
-
+    private IntegerProperty currentStone = new SimpleIntegerProperty();
+    private int currentPlayer;
     @Override
     public void start(Stage stage) throws IOException {
         Stone[] stones1 = new Stone[3];
