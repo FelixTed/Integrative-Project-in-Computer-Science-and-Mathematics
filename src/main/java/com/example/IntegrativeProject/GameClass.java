@@ -68,8 +68,8 @@ public class GameClass extends Application {
         TextField tF1 = new TextField();
         Label lbl2 = new Label("Angle: ");
         TextField tF2 = new TextField();
-        Button Launch = new Button("Launch");
-        hBox.getChildren().addAll(lbl1,tF1,lbl2,tF2,Launch);
+        Button launch = new Button("Launch");
+        hBox.getChildren().addAll(lbl1,tF1,lbl2,tF2,launch);
 
         hBox.setTranslateX(50);
         hBox.setTranslateY(600);
@@ -87,6 +87,11 @@ public class GameClass extends Application {
         Line normal = new Line(150,400,250,400);
         normal.getStrokeDashArray().addAll(4d);
         pane.getChildren().addAll(innerRect,donut1,donut2,donut3,Turn,normal,stone1,hBox);
+
+        //User Input
+        launch.setOnAction(e -> {
+
+        });
 
 
         Scene scene = new Scene( pane,1440,720);
