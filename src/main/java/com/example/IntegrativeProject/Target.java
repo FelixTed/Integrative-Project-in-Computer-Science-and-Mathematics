@@ -6,9 +6,9 @@ public class Target {
     private Circle radius1;
     private Circle radius2;
     private Circle radius3;
-    private int points1;
-    private int points2;
-    private int points3;
+    private int points1 =100;
+    private int points2 = 50;
+    private int points3 = 25;
 
     public Target(Circle radius1, Circle radius2, Circle radius3) {
         this.radius1 = radius1;
