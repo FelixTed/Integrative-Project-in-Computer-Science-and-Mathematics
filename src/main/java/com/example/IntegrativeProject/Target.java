@@ -16,10 +16,10 @@ public class Target {
         this.radius3 = radius3;
     }
 
-  /*  public int calculatePoints(Stone[] stones) {
+    public int calculatePoints(Stone[] stones) {
         int totalPoints = 0;
         for (Stone stone : stones) {
-            double distance = stone.getPosition().distance(0, 0); // Assuming the center of the target is at (0, 0)
+            double distance = Math.sqrt(Math.pow((stone.getCenterX() - 0), 2) + Math.pow((stone.getCenterY() - 0), 2)); // Assuming the center of the target is at (0, 0)
             if (distance <= radius1.getRadius()) {
                 totalPoints += points1;
             } else if (distance <= radius2.getRadius()) {
@@ -29,7 +29,7 @@ public class Target {
             }
         }
         return totalPoints;
-    }*/
+    }
 
     public Circle getRadius1() {
         return radius1;
@@ -76,7 +76,6 @@ public class Target {
     }
 
     public void setPoints3(int points3) {
-        this.points3 = points3;
+
     }
 }
-
