@@ -23,6 +23,8 @@ public class Board extends Application {
     private TextField angleField = new TextField();
     private Label statusLabel = new Label("Player 1's turn");
     private Button launchButton = new Button("Launch");
+    private  Line angleLine = new Line(150,380,250,380);
+    private Target target = new Target(new Circle(1100,380,40),new Circle(1100,380,100),new Circle(1100,380,180));
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -31,10 +33,10 @@ public class Board extends Application {
         Pane pane = new Pane();
         Stone stone1 = new Stone();
         stone1.setCenterX(100);
-        stone1.setCenterY(400);
+        stone1.setCenterY(380);
 
         //Test case
-        stone1.startMoving(150,25,stones1,stones2,stone1);
+        stone1.startMoving(150,-25,stones1,stones2,stone1);
 
         Image backGroundIm = new Image("gameBackground.jpg");
         BackgroundImage bGIMG = new BackgroundImage(backGroundIm, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
@@ -44,28 +46,27 @@ public class Board extends Application {
         pane.setBackground(background);
 
 
-        Circle wholeInner = new Circle(1200 ,400,30);
-        Circle insideInner = new Circle(1200,400,15);
+        Circle wholeInner = new Circle(1100 ,380,40);
 
 
-        Shape donut1 = Shape.subtract(wholeInner, insideInner);
-        donut1.setFill(Color.RED);
+        wholeInner.setFill(Color.RED);
 
-        Circle wholeMid = new Circle(1200,400,60);
-        Circle insideMid = new Circle(1200,400,30);
+        Circle wholeMid = new Circle(1100,380,100);
+        Circle insideMid = new Circle(1100,380,40);
         insideMid.setFill(Color.TRANSPARENT);
 
         Shape donut2 = Shape.subtract(wholeMid,insideMid);
         donut2.setFill(Color.LIGHTGRAY);
 
-        Circle wholeOuter = new Circle(1200,400,90);
-        Circle insideOuter = new Circle(1200,400,60);
+        Circle wholeOuter = new Circle(1100,380,180);
+        Circle insideOuter = new Circle(1100,380,100);
         insideOuter.setFill(Color.TRANSPARENT);
 
         Shape donut3= Shape.subtract(wholeOuter,insideOuter);
         donut3.setFill(Color.BLUE);
 
         HBox hBox = new HBox();
+        hBox.setSpacing(5);
         hBox.setPadding(new Insets(50));
 
         Label lbl1 = new Label("Kinetic Energy: ");
@@ -81,13 +82,20 @@ public class Board extends Application {
         statusLabel.setTranslateX(30);
         statusLabel.setTranslateY(30);
 
-        Rectangle innerRect = new Rectangle(25,175,1350,450);
+        Rectangle innerRect = new Rectangle(25,80,1350,600);
         innerRect.setFill(Color.LIGHTCYAN);
         innerRect.setStroke(Color.BLACK);
 
-        Line normal = new Line(150,400,250,400);
-        normal.getStrokeDashArray().addAll(4d);
-        pane.getChildren().addAll(innerRect,donut1,donut2,donut3,statusLabel,normal,stone1,hBox);
+/*target.getRadius1().setFill(null);
+target.getRadius2().setFill(null);
+target.getRadius3().setFill(null);
+
+        target.getRadius1().setStroke(Color.BLACK);
+        target.getRadius2().setStroke(Color.BLACK);
+        target.getRadius3().setStroke(Color.BLACK);*/
+
+        angleLine.getStrokeDashArray().addAll(4d);
+        pane.getChildren().addAll(innerRect,wholeInner,donut2,donut3,statusLabel,angleLine,stone1,hBox);
 
         //User Input
         launchButton.setOnAction(e -> {
@@ -95,7 +103,7 @@ public class Board extends Application {
         });
 
         Scene scene = new Scene( pane,1440,720);
-        stage.setTitle("Hello!");
+        stage.setTitle("Board");
         stage.setScene(scene);
         stage.show();
     }
