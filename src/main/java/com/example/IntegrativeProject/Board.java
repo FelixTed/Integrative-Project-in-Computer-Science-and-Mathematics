@@ -7,7 +7,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -19,7 +18,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class GameClass extends Application {
+public class Board extends Application {
+    private TextField energyField = new TextField();
+    private TextField angleField = new TextField();
+    private Label statusLabel = new Label("Player 1's turn");
+    private Button launchButton = new Button("Launch");
+
     @Override
     public void start(Stage stage) throws IOException {
         Stone[] stones1 = new Stone[3];
@@ -65,20 +69,17 @@ public class GameClass extends Application {
         hBox.setPadding(new Insets(50));
 
         Label lbl1 = new Label("Kinetic Energy: ");
-        TextField tF1 = new TextField();
+
         Label lbl2 = new Label("Angle: ");
-        TextField tF2 = new TextField();
-        Button launch = new Button("Launch");
-        hBox.getChildren().addAll(lbl1,tF1,lbl2,tF2,launch);
+
+        hBox.getChildren().addAll(lbl1,energyField,lbl2,angleField,launchButton);
 
         hBox.setTranslateX(50);
         hBox.setTranslateY(600);
 
-
-        Label Turn = new Label("Player 1's turn");
-        Turn.setFont(Font.font("Times New Roman",32));
-        Turn.setTranslateX(30);
-        Turn.setTranslateY(30);
+        statusLabel.setFont(Font.font("Times New Roman",32));
+        statusLabel.setTranslateX(30);
+        statusLabel.setTranslateY(30);
 
         Rectangle innerRect = new Rectangle(25,175,1350,450);
         innerRect.setFill(Color.LIGHTCYAN);
@@ -86,10 +87,10 @@ public class GameClass extends Application {
 
         Line normal = new Line(150,400,250,400);
         normal.getStrokeDashArray().addAll(4d);
-        pane.getChildren().addAll(innerRect,donut1,donut2,donut3,Turn,normal,stone1,hBox);
+        pane.getChildren().addAll(innerRect,donut1,donut2,donut3,statusLabel,normal,stone1,hBox);
 
         //User Input
-        launch.setOnAction(e -> {
+        launchButton.setOnAction(e -> {
 
         });
 

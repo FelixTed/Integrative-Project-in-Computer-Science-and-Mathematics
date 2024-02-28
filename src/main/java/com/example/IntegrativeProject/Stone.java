@@ -56,7 +56,6 @@ public class Stone extends Circle implements Runnable {
             thisStone.setCenterX(thisStone.getCenterX() + (movement*Math.cos(Math.toRadians(angle))));
             thisStone.setCenterY(thisStone.getCenterY() - (movement*Math.sin(Math.toRadians(angle))));
             thisStone.setSpeed(thisStone.getSpeed()-(FRICTIONCOEFFICIENT*9.81*(keyFrameTimeIntervalMillis/1000)));
-            System.out.println(thisStone.getSpeed());
             if(thisStone.getSpeed() <= 0){
                 isMoving= false;
                 movementTimeline.stop();

@@ -86,7 +86,7 @@ public class MainMenu extends Application {
                 stage.close();
                 Stage s = new Stage();
                 try {
-                    new GameClass().start(s);
+                    new Board().start(s);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
