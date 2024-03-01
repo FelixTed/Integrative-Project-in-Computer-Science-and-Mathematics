@@ -21,8 +21,8 @@ public class Stone extends Circle implements Runnable {
     private final Image GRAPHIC = new Image("blueStone.png");
     private final double FRICTIONCOEFFICIENT = 1.33;
     private final double RADIUS = 50;
-    private final int BASEX = 0;
-    private final int BASEY = 0;
+    private final int BASEX = 100;
+    private final int BASEY = 380;
     private final double keyFrameTimeIntervalMillis = 10;
 
     public Stone(){

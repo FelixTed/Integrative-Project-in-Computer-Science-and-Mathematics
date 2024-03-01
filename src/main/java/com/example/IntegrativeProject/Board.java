@@ -21,34 +21,36 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Board extends Application {
+    //Data field
     private TextField energyField = new TextField();
     private TextField angleField = new TextField();
     private Label statusLabel = new Label("Player 1's turn");
     private Button launchButton = new Button("Launch");
-    private  Line angleLine = new Line(150,380,250,380);
+    private  Line angleLine = new Line(100,380,250,380);
     private Target target = new Target(new Circle(1100,380,40),new Circle(1100,380,100),new Circle(1100,380,180));
     private IntegerProperty currentStone = new SimpleIntegerProperty();
     private int currentPlayer;
     @Override
     public void start(Stage stage) throws IOException {
-        Stone[] stones1 = new Stone[3];
-        Stone[] stones2 = new Stone[3];
+        //Initializing player 1 and 2
+        Stone[] stones1 = {new Stone(), new Stone(), new Stone()};
+        Stone[] stones2 = {new Stone(), new Stone(), new Stone()};
+        Player player1 = new Player(1,stones1);
+        Player player2 = new Player(2,stones2);
+        Player[] player = {player1,player2};
+
+        //Setting the starting state of the game
+        currentStone.set(1);
+        currentPlayer = 1;
+
         Pane pane = new Pane();
-        Stone stone1 = new Stone();
-        stone1.setCenterX(100);
-        stone1.setCenterY(380);
-
-        //Test case
-        stone1.startMoving(150,-25,stones1,stones2,stone1);
-
+        //setting the background
         Image backGroundIm = new Image("gameBackground.jpg");
         BackgroundImage bGIMG = new BackgroundImage(backGroundIm, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-
         Background background = new Background(bGIMG);
-
         pane.setBackground(background);
 
-
+        //Setting circles for the target
         Circle wholeInner = new Circle(1100 ,380,40);
 
 
@@ -89,17 +91,20 @@ public class Board extends Application {
         innerRect.setFill(Color.LIGHTCYAN);
         innerRect.setStroke(Color.BLACK);
 
-/*target.getRadius1().setFill(null);
-target.getRadius2().setFill(null);
-target.getRadius3().setFill(null);
+        target.getRadius1().setFill(null);
+        target.getRadius2().setFill(null);
+        target.getRadius3().setFill(null);
 
         target.getRadius1().setStroke(Color.BLACK);
         target.getRadius2().setStroke(Color.BLACK);
-        target.getRadius3().setStroke(Color.BLACK);*/
+        target.getRadius3().setStroke(Color.BLACK);
 
         angleLine.getStrokeDashArray().addAll(4d);
-        pane.getChildren().addAll(innerRect,wholeInner,donut2,donut3,statusLabel,angleLine,stone1,hBox);
+        pane.getChildren().addAll(innerRect,wholeInner,donut2,donut3,statusLabel,angleLine,hBox,stones1[0]);
 
+        angleField.textProperty().addListener(e -> {
+            drawAngle();
+        });
         //User Input
         launchButton.setOnAction(e -> {
 
@@ -110,6 +115,18 @@ target.getRadius3().setFill(null);
         stage.setScene(scene);
         stage.show();
     }
+    public  void drawAngle(){
+        try {
+            int length = 150;
 
+            double angleRad = Math.toRadians(Integer.parseInt(angleField.getText()));
+            angleLine.setEndX(100 + length * Math.cos(angleRad));
+            angleLine.setEndY(380 - length * Math.sin(angleRad));
+        }catch(NumberFormatException e){
+            //if angle input is not a numerical value, set angle line to initial position
+            angleLine.setEndX(250);
+            angleLine.setEndY(380);
+        }
+    }
 
 }
