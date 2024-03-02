@@ -42,7 +42,7 @@ public class Board extends Application {
         //Setting the starting state of the game
         currentStone.set(1);
         currentPlayer = 1;
-
+        //Setting up pane to make node visible
         Pane pane = new Pane();
         //setting the background
         Image backGroundIm = new Image("gameBackground.jpg");
