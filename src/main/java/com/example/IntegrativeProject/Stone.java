@@ -17,9 +17,9 @@ public class Stone extends Circle implements Runnable {
     private boolean isMoving = false;
     private int playerID;
     //Constant data fields
-    private final double MASS = 50;
+    private final double MASS = 20;
     private final Image GRAPHIC = new Image("blueStone.png");
-    private final double FRICTIONCOEFFICIENT = 1.33;
+    private final double FRICTIONCOEFFICIENT = 1;
     private final double RADIUS = 50;
     private final int BASEX = 100;
     private final int BASEY = 380;
@@ -41,8 +41,8 @@ public class Stone extends Circle implements Runnable {
         this.setCenterX(BASEX);
         this.setCenterY(BASEY);
     }
-    public void startMoving(double speed, double angle, Stone[] stones1, Stone[] stones2, Stone thisStone){
-        this.speed = speed;
+    public void startMoving(double kEnergy, double angle, Stone[] stones1, Stone[] stones2, Stone thisStone){
+        this.setSpeed(kEnergy);
         this.angle = angle;
         active = true;
 

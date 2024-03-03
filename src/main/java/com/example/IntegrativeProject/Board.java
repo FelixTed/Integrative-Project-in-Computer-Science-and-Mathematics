@@ -27,6 +27,7 @@ public class Board extends Application {
     private Label statusLabel = new Label("Player 1's turn");
     private Button launchButton = new Button("Launch");
     private  Line angleLine = new Line(100,380,250,380);
+    private double lineLength = 150;
     private Target target = new Target(new Circle(1100,380,40),new Circle(1100,380,100),new Circle(1100,380,180));
     private IntegerProperty currentStone = new SimpleIntegerProperty();
     private int currentPlayer;
@@ -49,6 +50,9 @@ public class Board extends Application {
         BackgroundImage bGIMG = new BackgroundImage(backGroundIm, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         Background background = new Background(bGIMG);
         pane.setBackground(background);
+
+        //TEST CASE
+        stones1[0].startMoving(125,10,stones1,stones2,stones1[0]);
 
         //Setting circles for the target
         Circle wholeInner = new Circle(1100 ,380,40);
@@ -102,8 +106,13 @@ public class Board extends Application {
         angleLine.getStrokeDashArray().addAll(4d);
         pane.getChildren().addAll(innerRect,wholeInner,donut2,donut3,statusLabel,angleLine,hBox,stones1[0]);
 
+        //Modify the angle of the line according to the angle value inputted
         angleField.textProperty().addListener(e -> {
             drawAngle();
+        });
+        //Modify the angle of the line according to the angle value inputted
+        energyField.textProperty().addListener(e -> {
+            drawLength();
         });
         //User Input
         launchButton.setOnAction(e -> {
@@ -115,16 +124,31 @@ public class Board extends Application {
         stage.setScene(scene);
         stage.show();
     }
+    //Modify the length of the line based on the value in energyField
+    public void drawLength(){
+        try {
+            int inputtedLength = Integer.parseInt(energyField.getText());
+            if(inputtedLength < 30)
+                lineLength = 1.75 * 30;
+            else if(inputtedLength > 300)
+                lineLength = 1.75 * 300;
+            else
+                lineLength = 1.75 * inputtedLength;
+        }catch(NumberFormatException nfe){
+            lineLength = 150;
+        }finally{
+            drawAngle();
+        }
+    }
+    //Draw the
     public  void drawAngle(){
         try {
-            int length = 150;
-
             double angleRad = Math.toRadians(Integer.parseInt(angleField.getText()));
-            angleLine.setEndX(100 + length * Math.cos(angleRad));
-            angleLine.setEndY(380 - length * Math.sin(angleRad));
-        }catch(NumberFormatException e){
+            angleLine.setEndX(100 + lineLength * Math.cos(angleRad));
+            angleLine.setEndY(380 - lineLength * Math.sin(angleRad));
+        }catch(NumberFormatException nfe){
             //if angle input is not a numerical value, set angle line to initial position
-            angleLine.setEndX(250);
+            angleLine.setEndX(100+lineLength);
             angleLine.setEndY(380);
         }
     }
