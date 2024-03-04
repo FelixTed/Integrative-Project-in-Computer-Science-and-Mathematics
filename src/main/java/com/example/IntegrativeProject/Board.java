@@ -41,8 +41,8 @@ public class Board extends Application {
         Player[] player = {player1,player2};
 
         //Setting the starting state of the game
-        currentStone.set(1);
-        currentPlayer = 1;
+        currentStone.set(0);
+        currentPlayer = 0;
         //Setting up pane to make node visible
         Pane pane = new Pane();
         //setting the background
@@ -50,9 +50,6 @@ public class Board extends Application {
         BackgroundImage bGIMG = new BackgroundImage(backGroundIm, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         Background background = new Background(bGIMG);
         pane.setBackground(background);
-
-        //TEST CASE
-        stones1[0].startMoving(125,10,stones1,stones2,stones1[0]);
 
         //Setting circles for the target
         Circle wholeInner = new Circle(1100 ,380,40);
@@ -116,7 +113,29 @@ public class Board extends Application {
         });
         //User Input
         launchButton.setOnAction(e -> {
-
+            Stone tempStone = player[currentPlayer].getStoneList()[currentStone.getValue()];
+            try {
+                tempStone.startMoving(Integer.parseInt(energyField.getText()), Integer.parseInt(angleField.getText()), stones1, stones2, tempStone);
+            }catch(NumberFormatException nfe){
+                try {
+                    tempStone.startMoving(Integer.parseInt(energyField.getText()), 0, stones1, stones2, tempStone);
+                }catch(NumberFormatException nfe2){
+                    tempStone.startMoving(0,0,stones1,stones2,tempStone);
+                }
+            }
+            tempStone.setActive(true);
+            if(currentPlayer == 1){
+                currentStone.set(currentStone.getValue()+1);
+                currentPlayer = 0;
+            }else
+                currentPlayer = 1;
+            System.out.println(currentPlayer + " " + currentStone);
+            try {
+                pane.getChildren().add(player[currentPlayer].getStoneList()[currentStone.getValue()]);
+            }catch(ArrayIndexOutOfBoundsException aioobe){
+                launchButton.setDisable(true);
+                //call endgame method
+            }
         });
 
         Scene scene = new Scene( pane,1440,720);
