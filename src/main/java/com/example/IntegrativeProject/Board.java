@@ -24,7 +24,7 @@ public class Board extends Application {
     //Data field
     private TextField energyField = new TextField();
     private TextField angleField = new TextField();
-    private Label statusLabel = new Label("Player 1's turn");
+    private Label statusLabel = new Label("Player 1's Turn");
     private Button launchButton = new Button("Launch");
     private  Line angleLine = new Line(100,380,250,380);
     private double lineLength = 150;
@@ -33,9 +33,11 @@ public class Board extends Application {
     private int currentPlayer;
     @Override
     public void start(Stage stage) throws IOException {
-        //Initializing player 1 and 2
-        Stone[] stones1 = {new Stone(), new Stone(), new Stone()};
-        Stone[] stones2 = {new Stone(), new Stone(), new Stone()};
+        //Initializing player 1 and 2, with corresponding colored stones
+        Stone[] stones1 = {new Stone(new Image("blueStone.png")), new Stone(new Image("blueStone.png")), new Stone(new Image("blueStone.png"))};
+        Stone[] stones2 = {new Stone(new Image("redStone.png")), new Stone(new Image("redStone.png")), new Stone(new Image("redStone.png"))};
+
+        //Creating the players and linking them to their personal list of stone
         Player player1 = new Player(1,stones1);
         Player player2 = new Player(2,stones2);
         Player[] player = {player1,player2};
@@ -43,8 +45,9 @@ public class Board extends Application {
         //Setting the starting state of the game
         currentStone.set(0);
         currentPlayer = 0;
-        //Setting up pane to make node visible
+        //Setting up pane to make nodes visible
         Pane pane = new Pane();
+
         //setting the background
         Image backGroundIm = new Image("gameBackground.jpg");
         BackgroundImage bGIMG = new BackgroundImage(backGroundIm, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
@@ -127,9 +130,11 @@ public class Board extends Application {
             if(currentPlayer == 1){
                 currentStone.set(currentStone.getValue()+1);
                 currentPlayer = 0;
-            }else
+                statusLabel.setText("Player 1's Turn");
+            }else {
                 currentPlayer = 1;
-            System.out.println(currentPlayer + " " + currentStone);
+                statusLabel.setText("Player 2's Turn");
+            }
             try {
                 pane.getChildren().add(player[currentPlayer].getStoneList()[currentStone.getValue()]);
             }catch(ArrayIndexOutOfBoundsException aioobe){
@@ -137,7 +142,6 @@ public class Board extends Application {
                 //call endgame method
             }
         });
-
         Scene scene = new Scene( pane,1440,720);
         stage.setTitle("Board");
         stage.setScene(scene);

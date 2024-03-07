@@ -16,26 +16,21 @@ public class Stone extends Circle implements Runnable {
     private double angle;
     private boolean isMoving = false;
     private int playerID;
+    private Image graphic = new Image("blueStone.png");
     //Constant data fields
     private final double MASS = 20;
-    private final Image GRAPHIC = new Image("blueStone.png");
     private final double FRICTIONCOEFFICIENT = 1;
     private final double RADIUS = 50;
     private final int BASEX = 100;
     private final int BASEY = 380;
     private final double keyFrameTimeIntervalMillis = 10;
 
-    public Stone(){
+    public Stone(Image graphic){
         //Setting the physical radius of the stone
         this.setRadius(RADIUS);
 
 
-        this.setFill(new ImagePattern(GRAPHIC));
-        //Binding the positional values of the circle and the graphics of the stone together
-       // this.GRAPHIC.setX(this.getCenterX());
-        //this.GRAPHIC.setY(this.getCenterY());
-        //this.GRAPHIC.xProperty().bindBidirectional(this.centerXProperty());
-        //this.GRAPHIC.yProperty().bindBidirectional(this.centerYProperty());
+        this.setFill(new ImagePattern(graphic));
 
         //Updating the position of the stone to the start position
         this.setCenterX(BASEX);
