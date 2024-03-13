@@ -127,6 +127,13 @@ public class Board extends Application {
                 }
             }
             tempStone.setActive(true);
+
+           /* //Wait for the stone to stop moving before allowing the game to continue
+            launchButton.setDisable(true);
+            while(tempStone.isMoving()){
+            }
+            launchButton.setDisable(false);*/
+
             if(currentPlayer == 1){
                 currentStone.set(currentStone.getValue()+1);
                 currentPlayer = 0;
