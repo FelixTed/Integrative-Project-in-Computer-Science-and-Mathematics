@@ -37,6 +37,11 @@ public class Board extends Application {
         Stone[] stones1 = {new Stone(new Image("blueStone.png")), new Stone(new Image("blueStone.png")), new Stone(new Image("blueStone.png"))};
         Stone[] stones2 = {new Stone(new Image("redStone.png")), new Stone(new Image("redStone.png")), new Stone(new Image("redStone.png"))};
 
+        for(int i = 0; i< stones1.length;i++){
+            stones1[i].setPlayerID(1);
+            stones2[i].setPlayerID(2);
+        }
+
         //Creating the players and linking them to their personal list of stone
         Player player1 = new Player(1,stones1);
         Player player2 = new Player(2,stones2);
