@@ -94,6 +94,7 @@ public class Board extends Application {
         hBox.setTranslateY(600);
 
         statusLabel.setFont(Font.font("Times New Roman",32));
+        statusLabel.setTextFill(Color.BLUE);
         statusLabel.setTranslateX(30);
         statusLabel.setTranslateY(30);
 
@@ -144,9 +145,11 @@ public class Board extends Application {
                 currentStone.set(currentStone.getValue()+1);
                 currentPlayer = 0;
                 statusLabel.setText("Player 1's Turn");
+                statusLabel.setTextFill(Color.BLUE);
             }else {
                 currentPlayer = 1;
                 statusLabel.setText("Player 2's Turn");
+                statusLabel.setTextFill(Color.RED);
             }
             try {
                 pane.getChildren().add(player[currentPlayer].getStoneList()[currentStone.getValue()]);
