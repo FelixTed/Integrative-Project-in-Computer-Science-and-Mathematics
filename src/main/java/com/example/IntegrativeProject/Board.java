@@ -37,6 +37,7 @@ public class Board extends Application {
     private Target target = new Target(new Circle(1100,380,40),new Circle(1100,380,100),new Circle(1100,380,180));
     private IntegerProperty currentStone = new SimpleIntegerProperty();
     private int currentPlayer;
+    private Boolean paused = false;
 
 
     @Override
@@ -102,7 +103,7 @@ public class Board extends Application {
         hBox.setTranslateY(600);
 
         statusLabel.setFont(Font.font("Times New Roman",32));
-        statusLabel.setTextFill(Color.BLUE);
+        statusLabel.setTextFill(Color.DARKBLUE);
         statusLabel.setTranslateX(30);
         statusLabel.setTranslateY(30);
 
@@ -144,9 +145,9 @@ public class Board extends Application {
         vBox.setMinSize(1440,720);
         // Pause menu of the game
         scene.setOnKeyPressed(e->{
-            if(e.getCode() == KeyCode.ESCAPE){
-
-                for(int i =0; i<stones1.length; i++){
+            if(e.getCode() == KeyCode.ESCAPE && !paused){
+                paused = true;
+                for(int i = 0; i<stones1.length; i++){
                     currentSpeed[i] = stones1[i].getSpeed();
                     currentSpeed[i+3] = stones2[i].getSpeed();
                     stones1[i].setSpeed(0);
@@ -158,35 +159,43 @@ public class Board extends Application {
                 menuButtView.setFitHeight(200);
                 menuButtView.setFitWidth(600);
                 pane.getChildren().addAll(vBox);
+                vBox.setAlignment(Pos.CENTER);
 
-
-                continueButtView.setOnMouseClicked(ev->{
-                    pane.getChildren().remove(vBox);
-                    for(int i =0;i< stones1.length;i++){
-                        if(stones1[i].isActive()) {
-                            stones1[i].startMoving(currentSpeed[i], stones1[i].getAngle(), stones1, stones2, stones1[i]);
-                        }
-                        if(stones2[i].isActive()) {
-                            stones2[i].startMoving(currentSpeed[i + 3], stones2[i].getAngle(), stones1, stones2, stones2[i]);
-                        }
+            }else if(e.getCode() == KeyCode.ESCAPE && paused){
+                paused = false;
+                pane.getChildren().remove(vBox);
+                for(int i =0;i< stones1.length;i++){
+                    if(stones1[i].isActive()) {
+                        stones1[i].startMoving(currentSpeed[i], stones1[i].getAngle(), stones1, stones2, stones1[i]);
                     }
-                });
-                menuButtView.setOnMouseClicked(ev->{
-                    stage.close();
-                    Stage s = new Stage();
-                    try{
-                        new MainMenu().start(s);
-                    }catch(IOException ex){
-                        throw new RuntimeException(ex);
+                    if(stones2[i].isActive()) {
+                        stones2[i].startMoving(currentSpeed[i + 3], stones2[i].getAngle(), stones1, stones2, stones2[i]);
                     }
-                });
-                scene.setOnKeyPressed(ek ->{
-                    if(ek.getCode() == KeyCode.ESCAPE){ System.out.println("HELHE");
-                    }
-                });
+                }
             }
 
-
+        });
+        continueButtView.setOnMouseClicked(ev->{
+            paused = false;
+            pane.getChildren().remove(vBox);
+            for(int i =0;i< stones1.length;i++){
+                if(stones1[i].isActive()) {
+                    stones1[i].startMoving(currentSpeed[i], stones1[i].getAngle(), stones1, stones2, stones1[i]);
+                }
+                if(stones2[i].isActive()) {
+                    stones2[i].startMoving(currentSpeed[i + 3], stones2[i].getAngle(), stones1, stones2, stones2[i]);
+                }
+            }
+        });
+        menuButtView.setOnMouseClicked(ev->{
+            paused = false;
+            stage.close();
+            Stage s = new Stage();
+            try{
+                new MainMenu().start(s);
+            }catch(IOException ex){
+                throw new RuntimeException(ex);
+            }
         });
         //User Input
         launchButton.setOnAction(e -> {
@@ -212,7 +221,7 @@ public class Board extends Application {
                 currentStone.set(currentStone.getValue()+1);
                 currentPlayer = 0;
                 statusLabel.setText("Player 1's Turn");
-                statusLabel.setTextFill(Color.BLUE);
+                statusLabel.setTextFill(Color.DARKBLUE);
             }else {
                 currentPlayer = 1;
                 statusLabel.setText("Player 2's Turn");
