@@ -4,11 +4,15 @@ import javafx.application.Application;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -16,6 +20,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -32,11 +37,14 @@ public class Board extends Application {
     private Target target = new Target(new Circle(1100,380,40),new Circle(1100,380,100),new Circle(1100,380,180));
     private IntegerProperty currentStone = new SimpleIntegerProperty();
     private int currentPlayer;
+
+
     @Override
     public void start(Stage stage) throws IOException {
         //Initializing player 1 and 2, with corresponding colored stones
         Stone[] stones1 = {new Stone(new Image("blueStone.png")), new Stone(new Image("blueStone.png")), new Stone(new Image("blueStone.png"))};
         Stone[] stones2 = {new Stone(new Image("redStone.png")), new Stone(new Image("redStone.png")), new Stone(new Image("redStone.png"))};
+        double[] currentSpeed = new double[stones1.length+ stones2.length];
 
         for(int i = 0; i< stones1.length;i++){
             stones1[i].setPlayerID(1);
@@ -113,6 +121,7 @@ public class Board extends Application {
         angleLine.getStrokeDashArray().addAll(4d);
         pane.getChildren().addAll(innerRect,wholeInner,donut2,donut3,statusLabel,angleLine,hBox,stones1[0]);
 
+
         //Modify the angle of the line according to the angle value inputted
         angleField.textProperty().addListener(e -> {
             drawAngle();
@@ -120,6 +129,64 @@ public class Board extends Application {
         //Modify the angle of the line according to the angle value inputted
         energyField.textProperty().addListener(e -> {
             drawLength();
+        });
+
+
+        VBox vBox = new VBox();
+        Scene scene = new Scene(pane,1440,720);
+        Image continueButt = new Image("ContinueButton.png");
+        ImageView continueButtView = new ImageView(continueButt);
+        Image menuButt = new Image("MenuButton.png");
+        ImageView menuButtView = new ImageView(menuButt);
+        Label pauseLbl = new Label("Paused");
+        pauseLbl.setFont(Font.font("Times New Roman", 64));
+        vBox.getChildren().addAll(pauseLbl,continueButtView,menuButtView);
+        vBox.setMinSize(1440,720);
+        // Pause menu of the game
+        scene.setOnKeyPressed(e->{
+            if(e.getCode() == KeyCode.ESCAPE){
+
+                for(int i =0; i<stones1.length; i++){
+                    currentSpeed[i] = stones1[i].getSpeed();
+                    currentSpeed[i+3] = stones2[i].getSpeed();
+                    stones1[i].setSpeed(0);
+                    stones2[i].setSpeed(0);
+                }
+
+                continueButtView.setFitHeight(200);
+                continueButtView.setFitWidth(600);
+                menuButtView.setFitHeight(200);
+                menuButtView.setFitWidth(600);
+                pane.getChildren().addAll(vBox);
+
+
+                continueButtView.setOnMouseClicked(ev->{
+                    pane.getChildren().remove(vBox);
+                    for(int i =0;i< stones1.length;i++){
+                        if(stones1[i].isActive()) {
+                            stones1[i].startMoving(currentSpeed[i], stones1[i].getAngle(), stones1, stones2, stones1[i]);
+                        }
+                        if(stones2[i].isActive()) {
+                            stones2[i].startMoving(currentSpeed[i + 3], stones2[i].getAngle(), stones1, stones2, stones2[i]);
+                        }
+                    }
+                });
+                menuButtView.setOnMouseClicked(ev->{
+                    stage.close();
+                    Stage s = new Stage();
+                    try{
+                        new MainMenu().start(s);
+                    }catch(IOException ex){
+                        throw new RuntimeException(ex);
+                    }
+                });
+                scene.setOnKeyPressed(ek ->{
+                    if(ek.getCode() == KeyCode.ESCAPE){ System.out.println("HELHE");
+                    }
+                });
+            }
+
+
         });
         //User Input
         launchButton.setOnAction(e -> {
@@ -158,11 +225,11 @@ public class Board extends Application {
                 //call endgame method
             }
         });
-        Scene scene = new Scene( pane,1440,720);
+
         stage.setTitle("Board");
         stage.setScene(scene);
         stage.setResizable(false);
-        stage.initStyle(StageStyle.UNDECORATED);
+        stage.initStyle(StageStyle.UTILITY);
         stage.show();
     }
     //Modify the length of the line based on the value in energyField
