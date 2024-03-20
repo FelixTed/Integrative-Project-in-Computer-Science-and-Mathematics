@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 public class Stone extends Circle implements Runnable{
@@ -28,6 +29,7 @@ public class Stone extends Circle implements Runnable{
     private final int BASEY = 380;
     private final double keyFrameTimeIntervalMillis = 10;
 
+
     public Stone(Image graphic){
         //Setting the physical radius of the stone
         this.setRadius(RADIUS);
@@ -40,6 +42,7 @@ public class Stone extends Circle implements Runnable{
         this.setCenterY(BASEY);
     }
     public void startMoving(double kEnergy, double angle, Stone[] stones1, Stone[] stones2, Stone thisStone){
+        Rectangle innerRect = new Rectangle(25,80,1350,600);
         this.stones1 = stones1;
         this.stones2 = stones2;
         this.setSpeed(kEnergy);
@@ -70,6 +73,8 @@ public class Stone extends Circle implements Runnable{
 
                     thisStone.setSpeed((thisStone.getSpeed()/2));
                     stones1[i].startMoving(thisStone.getSpeed(),stones1[i].angle,stones1,stones2,stones1[i]);
+
+
                 }
                 if(checkOverlap(stones2[i])){
                     System.out.println("COllision!" +Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones2[i].getCenterY())/(thisStone.getCenterX()-stones2[i].getCenterX()))));
@@ -85,7 +90,10 @@ public class Stone extends Circle implements Runnable{
                     thisStone.setSpeed((thisStone.getSpeed()/2));
                     stones2[i].startMoving(thisStone.getSpeed(),stones2[i].angle,stones1,stones2,stones2[i]);
                 }
+
+
             }
+
             if(thisStone.getSpeed() <= 0){
                 this.setMoving(false);
                 movementTimeline.stop();
