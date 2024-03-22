@@ -19,7 +19,7 @@ public class Target {
     public int calculatePoints(Stone[] stones) {
         int totalPoints = 0;
         for (Stone stone : stones) {
-            double distance = Math.sqrt(Math.pow((stone.getCenterX() - 0), 2) + Math.pow((stone.getCenterY() - 0), 2)); // Assuming the center of the target is at (0, 0)
+            double distance = Math.sqrt(Math.pow((stone.getCenterX() - radius1.getCenterX()), 2) + Math.pow((stone.getCenterY() - radius1.getCenterY()), 2)); // Assuming the center of the target is at (0, 0)
             if (distance <= radius1.getRadius()) {
                 totalPoints += points1;
             } else if (distance <= radius2.getRadius()) {
