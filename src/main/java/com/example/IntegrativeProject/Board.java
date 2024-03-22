@@ -28,9 +28,14 @@ import java.io.IOException;
 
 public class Board extends Application {
     //Data field
+    private Player player1;
+    private Player player2;
+    private Stone[] stones1;
+    private Stone[] stones2;
     private TextField energyField = new TextField();
     private TextField angleField = new TextField();
     private Label statusLabel = new Label("Player 1's Turn");
+    private Label winningLabel = new Label("TESTSTSEEST");
     private Button launchButton = new Button("Launch");
     private  Line angleLine = new Line(100,380,250,380);
     private double lineLength = 150;
@@ -43,8 +48,8 @@ public class Board extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         //Initializing player 1 and 2, with corresponding colored stones
-        Stone[] stones1 = {new Stone(new Image("blueStone.png")), new Stone(new Image("blueStone.png")), new Stone(new Image("blueStone.png"))};
-        Stone[] stones2 = {new Stone(new Image("redStone.png")), new Stone(new Image("redStone.png")), new Stone(new Image("redStone.png"))};
+        stones1 = new Stone[]{new Stone(new Image("blueStone.png")), new Stone(new Image("blueStone.png")), new Stone(new Image("blueStone.png"))};
+        stones2 = new Stone[]{new Stone(new Image("redStone.png")), new Stone(new Image("redStone.png")), new Stone(new Image("redStone.png"))};
         double[] currentSpeed = new double[stones1.length+ stones2.length];
 
         for(int i = 0; i< stones1.length;i++){
@@ -53,8 +58,8 @@ public class Board extends Application {
         }
 
         //Creating the players and linking them to their personal list of stone
-        Player player1 = new Player(1,stones1);
-        Player player2 = new Player(2,stones2);
+        player1 = new Player(1,stones1);
+        player2 = new Player(2,stones2);
         Player[] player = {player1,player2};
 
         //Setting the starting state of the game
@@ -120,7 +125,11 @@ public class Board extends Application {
         target.getRadius3().setStroke(Color.BLACK);
 
         angleLine.getStrokeDashArray().addAll(4d);
-        pane.getChildren().addAll(innerRect,wholeInner,donut2,donut3,statusLabel,angleLine,hBox,stones1[0]);
+
+        winningLabel.setLayoutX(550);
+        winningLabel.setLayoutY(375);
+
+        pane.getChildren().addAll(innerRect,wholeInner,donut2,donut3,statusLabel,angleLine,hBox,stones1[0],winningLabel);
 
 
         //Modify the angle of the line according to the angle value inputted
@@ -211,11 +220,13 @@ public class Board extends Application {
             }
             tempStone.setActive(true);
 
-           /* //Wait for the stone to stop moving before allowing the game to continue
-            launchButton.setDisable(true);
-            while(tempStone.isMoving()){
-            }
-            launchButton.setDisable(false);*/
+           //Wait for the stone to stop moving before allowing the game to continue
+            tempStone.isMoving().addListener((e2,e3,value) ->{
+                if(value){
+                        launchButton.setDisable(true);
+                }else if(currentStone.getValue() != 4)
+                    launchButton.setDisable(false);
+            });
 
             if(currentPlayer == 1){
                 currentStone.set(currentStone.getValue()+1);
@@ -231,7 +242,17 @@ public class Board extends Application {
                 pane.getChildren().add(player[currentPlayer].getStoneList()[currentStone.getValue()]);
             }catch(ArrayIndexOutOfBoundsException aioobe){
                 launchButton.setDisable(true);
-                //call endgame method
+                boolean moving = true;
+                while(moving){
+                    moving = false;
+                    for(int i = 0 ; i < stones1.length; i++){
+                        if(stones1[i].isMoving().getValue())
+                            moving = true;
+                        else if(stones2[i].isMoving().getValue())
+                            moving = true;
+                    }
+                }
+                endGame();
             }
         });
 
@@ -269,5 +290,29 @@ public class Board extends Application {
             angleLine.setEndY(380);
         }
     }
+    public void endGame(){
 
+
+        winningLabel.setFont(new Font(50));
+        statusLabel.setTextFill(Color.BLACK);
+
+        player1.setPointsTotal(target.calculatePoints(stones1));
+        player2.setPointsTotal(target.calculatePoints(stones2));
+        statusLabel.setText("Player 1: " + player1.getPointsTotal() + " points\tPlayer 2: " + player2.getPointsTotal() + " points");
+
+        int winner;
+        if(player1.getPointsTotal() > player2.getPointsTotal()) {
+            winningLabel.setTextFill(Color.BLUE);
+            winningLabel.setText("Player 1 WINS!");
+        }
+        else if(player1.getPointsTotal() < player2.getPointsTotal()){
+            winningLabel.setTextFill(Color.RED);
+            winningLabel.setText("Player 2 WINS!");
+        }
+        else{
+            winningLabel.setTextFill(Color.BLACK);
+            winningLabel.setText("Draw");
+            return;
+        }
+    }
 }

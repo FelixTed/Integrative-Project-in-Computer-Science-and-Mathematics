@@ -2,6 +2,8 @@ package com.example.IntegrativeProject;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,7 +18,7 @@ public class Stone extends Circle implements Runnable{
     private double speed;
     private boolean active = false;
     private double angle;
-    private boolean isMoving = false;
+    private BooleanProperty isMoving = new SimpleBooleanProperty(false);
     private int playerID;
 
     private Stone[] stones1;
@@ -135,12 +137,12 @@ public class Stone extends Circle implements Runnable{
     }
 
     // Getter and Setter for isMoving
-    public boolean isMoving() {
+    public BooleanProperty isMoving() {
         return isMoving;
     }
 
     public void setMoving(boolean moving) {
-        isMoving = moving;
+        isMoving.set(moving);
     }
 
     // Getter and Setter for playerID
