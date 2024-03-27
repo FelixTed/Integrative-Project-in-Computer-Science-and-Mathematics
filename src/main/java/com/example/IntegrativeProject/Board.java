@@ -43,6 +43,7 @@ public class Board extends Application {
     private IntegerProperty currentStone = new SimpleIntegerProperty();
     private int currentPlayer;
     private Boolean paused = false;
+    private Boolean endgame = false;
 
 
     @Override
@@ -224,8 +225,12 @@ public class Board extends Application {
             tempStone.isMoving().addListener((e2,e3,value) ->{
                 if(value){
                         launchButton.setDisable(true);
-                }else if(currentStone.getValue() != 4)
+                }else if(endgame){
+                    launchButton.setDisable(true);
+                    endGame();
+                }else if(currentStone.getValue() != 4) {
                     launchButton.setDisable(false);
+                }
             });
 
             if(currentPlayer == 1){
@@ -242,17 +247,7 @@ public class Board extends Application {
                 pane.getChildren().add(player[currentPlayer].getStoneList()[currentStone.getValue()]);
             }catch(ArrayIndexOutOfBoundsException aioobe){
                 launchButton.setDisable(true);
-                boolean moving = true;
-                while(moving){
-                    moving = false;
-                    for(int i = 0 ; i < stones1.length; i++){
-                        if(stones1[i].isMoving().getValue())
-                            moving = true;
-                        else if(stones2[i].isMoving().getValue())
-                            moving = true;
-                    }
-                }
-                endGame();
+                endgame = true;
             }
         });
 
@@ -291,8 +286,6 @@ public class Board extends Application {
         }
     }
     public void endGame(){
-
-
         winningLabel.setFont(new Font(50));
         statusLabel.setTextFill(Color.BLACK);
 
