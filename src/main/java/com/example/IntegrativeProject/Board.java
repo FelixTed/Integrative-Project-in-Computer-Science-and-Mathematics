@@ -35,7 +35,7 @@ public class Board extends Application {
     private TextField energyField = new TextField();
     private TextField angleField = new TextField();
     private Label statusLabel = new Label("Player 1's Turn");
-    private Label winningLabel = new Label("TESTSTSEEST");
+    private Label winningLabel = new Label("");
     private Button launchButton = new Button("Launch");
     private  Line angleLine = new Line(100,380,250,380);
     private double lineLength = 150;
