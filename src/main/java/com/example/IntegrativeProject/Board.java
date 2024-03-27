@@ -226,8 +226,13 @@ public class Board extends Application {
                 if(value){
                         launchButton.setDisable(true);
                 }else if(endgame){
+
                     launchButton.setDisable(true);
-                    endGame();
+                    try {
+                        endGame();
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }else if(currentStone.getValue() != 4) {
                     launchButton.setDisable(false);
                 }
@@ -285,9 +290,11 @@ public class Board extends Application {
             angleLine.setEndY(380);
         }
     }
-    public void endGame(){
+    public void endGame() throws InterruptedException {
         winningLabel.setFont(new Font(50));
         statusLabel.setTextFill(Color.BLACK);
+        winningLabel.setText("Calculating Points...");
+        Thread.sleep(5000);
 
         player1.setPointsTotal(target.calculatePoints(stones1));
         player2.setPointsTotal(target.calculatePoints(stones2));
