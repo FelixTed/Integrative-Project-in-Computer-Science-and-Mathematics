@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
@@ -23,6 +24,7 @@ public class Stone extends Circle implements Runnable{
 
     private Stone[] stones1;
     private Stone[] stones2;
+    private Line[] borders;
     //Constant data fields
     private final double MASS = 20;
     private final double FRICTIONCOEFFICIENT = 1;
@@ -32,10 +34,11 @@ public class Stone extends Circle implements Runnable{
     private final double keyFrameTimeIntervalMillis = 10;
 
 
-    public Stone(Image graphic){
+    public Stone(Image graphic,Line[] borders){
         //Setting the physical radius of the stone
         this.setRadius(RADIUS);
 
+        this.borders = borders;
 
         this.setFill(new ImagePattern(graphic));
 
@@ -49,6 +52,8 @@ public class Stone extends Circle implements Runnable{
         this.stones2 = stones2;
         this.setSpeed(kEnergy);
         this.angle = angle;
+        if(this.angle < 0)
+            angle = 360 + this.angle;
         active = true;
 
         movementTimeline.setCycleCount(Timeline.INDEFINITE);
@@ -62,14 +67,17 @@ public class Stone extends Circle implements Runnable{
             thisStone.setCenterY(thisStone.getCenterY() - (movement*Math.sin(Math.toRadians(this.angle))));
             thisStone.setSpeed(thisStone.getSpeed()-(FRICTIONCOEFFICIENT*9.81*(keyFrameTimeIntervalMillis/1000)));
             for(int i = 0; i < stones1.length;i++){
+                int coefficient = 0;
                 if(checkOverlap(stones1[i])){
+                    if(thisStone.getCenterX()>stones1[i].getCenterX())
+                        coefficient = 1;
                     System.out.println("COLLISION! " + Math.toDegrees(Math.atan((thisStone.getCenterY()-stones1[i].getCenterY())/(thisStone.getCenterX()-stones1[i].getCenterX()))));
-                    thisStone.setAngle(180+Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones1[i].getCenterY())/(thisStone.getCenterX()-stones1[i].getCenterX()))));
-                    stones1[i].setAngle(Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones1[i].getCenterY())/(thisStone.getCenterX()-stones1[i].getCenterX()))));
+                    thisStone.setAngle(coefficient*180+(180+Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones1[i].getCenterY())/(thisStone.getCenterX()-stones1[i].getCenterX())))));
+                    stones1[i].setAngle(coefficient*180+Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones1[i].getCenterY())/(thisStone.getCenterX()-stones1[i].getCenterX()))));
 
                     double tempMovement = 1*thisStone.getSpeed() * keyFrameTimeIntervalMillis/1000;
-                    thisStone.setCenterX(thisStone.getCenterX() - (tempMovement*Math.cos(Math.toRadians(angle))));
-                    thisStone.setCenterY(thisStone.getCenterY() - (tempMovement*Math.sin(Math.toRadians(angle))));
+                    thisStone.setCenterX(thisStone.getCenterX() + (tempMovement*Math.cos(Math.toRadians(this.angle))));
+                    thisStone.setCenterY(thisStone.getCenterY() - (tempMovement*Math.sin(Math.toRadians(this.angle))));
                     stones1[i].setCenterX(stones1[i].getCenterX() + (tempMovement*Math.cos(Math.toRadians(stones1[i].getAngle()))));
                     stones1[i].setCenterY(stones1[i].getCenterY() - (tempMovement*Math.sin(Math.toRadians(stones1[i].getAngle()))));
 
@@ -79,13 +87,15 @@ public class Stone extends Circle implements Runnable{
 
                 }
                 if(checkOverlap(stones2[i])){
+                    if(thisStone.getCenterX()>stones2[i].getCenterX())
+                        coefficient = 1;
                     System.out.println("COllision!" +Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones2[i].getCenterY())/(thisStone.getCenterX()-stones2[i].getCenterX()))));
-                    thisStone.setAngle(180+Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones2[i].getCenterY())/(thisStone.getCenterX()-stones2[i].getCenterX()))));
-                    stones2[i].setAngle(Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones2[i].getCenterY())/(thisStone.getCenterX()-stones2[i].getCenterX()))));
+                    thisStone.setAngle(coefficient*180+(180+Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones2[i].getCenterY())/(thisStone.getCenterX()-stones2[i].getCenterX())))));
+                    stones2[i].setAngle(coefficient*180+Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones2[i].getCenterY())/(thisStone.getCenterX()-stones2[i].getCenterX()))));
 
                     double tempMovement = 1*thisStone.getSpeed() * keyFrameTimeIntervalMillis/1000;
-                    thisStone.setCenterX(thisStone.getCenterX() - (tempMovement*Math.cos(Math.toRadians(angle))));
-                    thisStone.setCenterY(thisStone.getCenterY() - (tempMovement*Math.sin(Math.toRadians(angle))));
+                    thisStone.setCenterX(thisStone.getCenterX() + (tempMovement*Math.cos(Math.toRadians(this.angle))));
+                    thisStone.setCenterY(thisStone.getCenterY() - (tempMovement*Math.sin(Math.toRadians(this.angle))));
                     stones2[i].setCenterX(stones2[i].getCenterX() + (tempMovement*Math.cos(Math.toRadians(stones2[i].getAngle()))));
                     stones2[i].setCenterY(stones2[i].getCenterY() - (tempMovement*Math.sin(Math.toRadians(stones2[i].getAngle()))));
 
@@ -95,7 +105,16 @@ public class Stone extends Circle implements Runnable{
 
 
             }
-
+            for(int i = 0; i<borders.length;i++){
+                if(thisStone.intersects(borders[i].getBoundsInLocal())){
+                    //Upper or lower border
+                    if(i%2 == 1)
+                        this.setAngle(-this.angle);
+                    //right or left border
+                    else
+                        this.setAngle(180-this.angle);
+                }
+            }
             if(thisStone.getSpeed() <= 0){
                 this.setMoving(false);
                 movementTimeline.stop();

@@ -45,13 +45,21 @@ public class Board extends Application {
     private Boolean paused = false;
     private Boolean endgame = false;
 
+    private Line upperBorder = new Line(25,80,1375,80);
+    private Line leftBorder = new Line(25,80,25,680);
+    private Line rightBorder = new Line(1375,80,1375,680);
+    private Line lowerBorder = new Line(25,680,1375,680);
 
     @Override
     public void start(Stage stage) throws IOException {
+        //Putting the borders of the game in a list
+        Line[] borders = {leftBorder,upperBorder,rightBorder,lowerBorder};
+
         //Initializing player 1 and 2, with corresponding colored stones
-        stones1 = new Stone[]{new Stone(new Image("blueStone.png")), new Stone(new Image("blueStone.png")), new Stone(new Image("blueStone.png"))};
-        stones2 = new Stone[]{new Stone(new Image("redStone.png")), new Stone(new Image("redStone.png")), new Stone(new Image("redStone.png"))};
+        stones1 = new Stone[]{new Stone(new Image("blueStone.png"),borders), new Stone(new Image("blueStone.png"),borders), new Stone(new Image("blueStone.png"),borders)};
+        stones2 = new Stone[]{new Stone(new Image("redStone.png"),borders), new Stone(new Image("redStone.png"),borders), new Stone(new Image("redStone.png"),borders)};
         double[] currentSpeed = new double[stones1.length+ stones2.length];
+
 
         for(int i = 0; i< stones1.length;i++){
             stones1[i].setPlayerID(1);
@@ -113,6 +121,7 @@ public class Board extends Application {
         statusLabel.setTranslateX(30);
         statusLabel.setTranslateY(30);
 
+
         Rectangle innerRect = new Rectangle(25,80,1350,600);
         innerRect.setFill(Color.LIGHTCYAN);
         innerRect.setStroke(Color.BLACK);
@@ -130,7 +139,7 @@ public class Board extends Application {
         winningLabel.setLayoutX(550);
         winningLabel.setLayoutY(375);
 
-        pane.getChildren().addAll(innerRect,wholeInner,donut2,donut3,statusLabel,angleLine,hBox,stones1[0],winningLabel);
+        pane.getChildren().addAll(innerRect,wholeInner,donut2,donut3,statusLabel,angleLine,hBox,stones1[0],upperBorder,lowerBorder,rightBorder,leftBorder);
 
 
         //Modify the angle of the line according to the angle value inputted
@@ -252,6 +261,7 @@ public class Board extends Application {
                 pane.getChildren().add(player[currentPlayer].getStoneList()[currentStone.getValue()]);
             }catch(ArrayIndexOutOfBoundsException aioobe){
                 launchButton.setDisable(true);
+                pane.getChildren().add(winningLabel);
                 endgame = true;
             }
         });
@@ -294,7 +304,7 @@ public class Board extends Application {
         winningLabel.setFont(new Font(50));
         statusLabel.setTextFill(Color.BLACK);
         winningLabel.setText("Calculating Points...");
-        Thread.sleep(5000);
+        Thread.sleep(1000);
 
         player1.setPointsTotal(target.calculatePoints(stones1));
         player2.setPointsTotal(target.calculatePoints(stones2));
@@ -314,5 +324,8 @@ public class Board extends Application {
             winningLabel.setText("Draw");
             return;
         }
+    }
+    private class Border{
+
     }
 }
