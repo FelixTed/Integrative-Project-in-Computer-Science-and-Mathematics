@@ -49,11 +49,14 @@ public class Board extends Application {
     private Line leftBorder = new Line(25,80,25,680);
     private Line rightBorder = new Line(1375,80,1375,680);
     private Line lowerBorder = new Line(25,680,1375,680);
+    private Line limit = new Line(250,80,250,680);
 
     @Override
     public void start(Stage stage) throws IOException {
         //Putting the borders of the game in a list
         Line[] borders = {leftBorder,upperBorder,rightBorder,lowerBorder};
+
+        limit.getStrokeDashArray().addAll(2d, 21d);;
 
         //Initializing player 1 and 2, with corresponding colored stones
         stones1 = new Stone[]{new Stone(new Image("blueStone.png"),borders), new Stone(new Image("blueStone.png"),borders), new Stone(new Image("blueStone.png"),borders)};
@@ -139,7 +142,7 @@ public class Board extends Application {
         winningLabel.setLayoutX(550);
         winningLabel.setLayoutY(375);
 
-        pane.getChildren().addAll(innerRect,wholeInner,donut2,donut3,statusLabel,angleLine,hBox,stones1[0],upperBorder,lowerBorder,rightBorder,leftBorder);
+        pane.getChildren().addAll(innerRect,wholeInner,donut2,donut3,limit,statusLabel,angleLine,hBox,stones1[0],upperBorder,lowerBorder,rightBorder,leftBorder);
 
 
         //Modify the angle of the line according to the angle value inputted
@@ -164,11 +167,11 @@ public class Board extends Application {
         vBox.setMinSize(1440,720);
         // Pause menu of the game
         scene.setOnKeyPressed(e->{
-            if(e.getCode() == KeyCode.ESCAPE && !paused){
+            if(e.getCode() == KeyCode.ESCAPE && !paused && !endgame){
                 paused = true;
                 for(int i = 0; i<stones1.length; i++){
-                    currentSpeed[i] = stones1[i].getSpeed();
-                    currentSpeed[i+3] = stones2[i].getSpeed();
+                    currentSpeed[i] = stones1[i].getKEnergy();
+                    currentSpeed[i+3] = stones2[i].getKEnergy();
                     stones1[i].setSpeed(0);
                     stones2[i].setSpeed(0);
                 }
@@ -180,7 +183,7 @@ public class Board extends Application {
                 pane.getChildren().addAll(vBox);
                 vBox.setAlignment(Pos.CENTER);
 
-            }else if(e.getCode() == KeyCode.ESCAPE && paused){
+            }else if(e.getCode() == KeyCode.ESCAPE && paused && !endgame){
                 paused = false;
                 pane.getChildren().remove(vBox);
                 for(int i =0;i< stones1.length;i++){
@@ -190,6 +193,14 @@ public class Board extends Application {
                     if(stones2[i].isActive()) {
                         stones2[i].startMoving(currentSpeed[i + 3], stones2[i].getAngle(), stones1, stones2, stones2[i]);
                     }
+                }
+            }else if(e.getCode() == KeyCode.ESCAPE && endgame){
+                stage.close();
+                Stage s = new Stage();
+                try{
+                    new MainMenu().start(s);
+                }catch(IOException ex){
+                    throw new RuntimeException(ex);
                 }
             }
 
@@ -304,7 +315,7 @@ public class Board extends Application {
         winningLabel.setFont(new Font(50));
         statusLabel.setTextFill(Color.BLACK);
         winningLabel.setText("Calculating Points...");
-        Thread.sleep(1000);
+        //Thread.sleep(1000);
 
         player1.setPointsTotal(target.calculatePoints(stones1));
         player2.setPointsTotal(target.calculatePoints(stones2));
@@ -322,7 +333,10 @@ public class Board extends Application {
         else{
             winningLabel.setTextFill(Color.BLACK);
             winningLabel.setText("Draw");
-            return;
+        }
+        for(int i = 0; i<stones1.length;i++){
+            stones1[i].setSpeedKEnergy(0);
+            stones2[i].setSpeedKEnergy(0);
         }
     }
     private class Border{

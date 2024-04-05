@@ -27,7 +27,7 @@ public class Stone extends Circle implements Runnable{
     private Line[] borders;
     //Constant data fields
     private final double MASS = 20;
-    private final double FRICTIONCOEFFICIENT = 1;
+    private final double FRICTIONCOEFFICIENT = 0.05;
     private final double RADIUS = 50;
     private final int BASEX = 100;
     private final int BASEY = 380;
@@ -47,10 +47,9 @@ public class Stone extends Circle implements Runnable{
         this.setCenterY(BASEY);
     }
     public void startMoving(double kEnergy, double angle, Stone[] stones1, Stone[] stones2, Stone thisStone){
-        Rectangle innerRect = new Rectangle(25,80,1350,600);
         this.stones1 = stones1;
         this.stones2 = stones2;
-        this.setSpeed(kEnergy);
+        this.setSpeedKEnergy(kEnergy);
         this.angle = angle;
         if(this.angle < 0)
             angle = 360 + this.angle;
@@ -62,7 +61,7 @@ public class Stone extends Circle implements Runnable{
         KeyFrame keyframe = new KeyFrame(Duration.millis(keyFrameTimeIntervalMillis), e ->{
             System.out.println(this.getPlayerID() + " " + this.getCenterX() + " " + this.getCenterY()+ " " + this.speed);
             this.setMoving(true);
-            double movement = thisStone.getSpeed() * keyFrameTimeIntervalMillis/1000;
+            double movement = 100*thisStone.getSpeed() * keyFrameTimeIntervalMillis/1000;
             thisStone.setCenterX(thisStone.getCenterX() + (movement*Math.cos(Math.toRadians(this.angle))));
             thisStone.setCenterY(thisStone.getCenterY() - (movement*Math.sin(Math.toRadians(this.angle))));
             thisStone.setSpeed(thisStone.getSpeed()-(FRICTIONCOEFFICIENT*9.81*(keyFrameTimeIntervalMillis/1000)));
@@ -81,8 +80,9 @@ public class Stone extends Circle implements Runnable{
                     stones1[i].setCenterX(stones1[i].getCenterX() + (tempMovement*Math.cos(Math.toRadians(stones1[i].getAngle()))));
                     stones1[i].setCenterY(stones1[i].getCenterY() - (tempMovement*Math.sin(Math.toRadians(stones1[i].getAngle()))));
 
-                    thisStone.setSpeed((thisStone.getSpeed()/2));
-                    stones1[i].startMoving(thisStone.getSpeed(),stones1[i].angle,stones1,stones2,stones1[i]);
+                    thisStone.setSpeedKEnergy((thisStone.getKEnergy()/2));
+                    stones1[i].startMoving(thisStone.getKEnergy(),stones1[i].angle,stones1,stones2,stones1[i]);
+                    thisStone.setSpeedKEnergy(this.getKEnergy()-0.3* thisStone.getKEnergy());
 
 
                 }
@@ -99,8 +99,10 @@ public class Stone extends Circle implements Runnable{
                     stones2[i].setCenterX(stones2[i].getCenterX() + (tempMovement*Math.cos(Math.toRadians(stones2[i].getAngle()))));
                     stones2[i].setCenterY(stones2[i].getCenterY() - (tempMovement*Math.sin(Math.toRadians(stones2[i].getAngle()))));
 
-                    thisStone.setSpeed((thisStone.getSpeed()/2));
-                    stones2[i].startMoving(thisStone.getSpeed(),stones2[i].angle,stones1,stones2,stones2[i]);
+
+                    thisStone.setSpeedKEnergy((thisStone.getKEnergy()/2));
+                    stones2[i].startMoving(thisStone.getKEnergy(),stones2[i].angle,stones1,stones2,stones2[i]);
+                    thisStone.setSpeedKEnergy(this.getKEnergy()-0.3* thisStone.getKEnergy());
                 }
 
 
@@ -117,6 +119,10 @@ public class Stone extends Circle implements Runnable{
             }
             if(thisStone.getSpeed() <= 0){
                 this.setMoving(false);
+                if(thisStone.getCenterX() <250){
+                    this.setActive(false);
+                    this.setFill(null);
+                }
                 movementTimeline.stop();
             }
         });
@@ -135,6 +141,10 @@ public class Stone extends Circle implements Runnable{
     public void setSpeedKEnergy(double kEnergy) {
         //Setting speed according to kinetic energy and mass
         this.speed = Math.sqrt((2*kEnergy)/MASS);
+
+    }
+    public void setKEnergy(double kEnergy){
+
     }
 
     // Getter and Setter for active
