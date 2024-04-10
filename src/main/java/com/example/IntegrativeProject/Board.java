@@ -28,13 +28,15 @@ import java.io.IOException;
 
 public class Board extends Application {
     //Data field
+    private String player1Name = "player 1";
+    private String player2Name = "player 2";
     private Player player1;
     private Player player2;
     private Stone[] stones1;
     private Stone[] stones2;
     private TextField energyField = new TextField();
     private TextField angleField = new TextField();
-    private Label statusLabel = new Label("Player 1's Turn");
+    private Label statusLabel = new Label(player1Name+"'s Turn");
     private Label winningLabel = new Label("");
     private Button launchButton = new Button("Launch");
     private  Line angleLine = new Line(100,380,250,380);
@@ -50,9 +52,13 @@ public class Board extends Application {
     private Line rightBorder = new Line(1375,80,1375,680);
     private Line lowerBorder = new Line(25,680,1375,680);
     private Line limit = new Line(250,80,250,680);
+    //Stores value for kEnergy, used to check if kEnergy is too big
+    double value;
 
     @Override
     public void start(Stage stage) throws IOException {
+        //Setting correct name for user
+        statusLabel.setText(player1Name+"'s turn");
         //Putting the borders of the game in a list
         Line[] borders = {leftBorder,upperBorder,rightBorder,lowerBorder};
 
@@ -229,12 +235,18 @@ public class Board extends Application {
         });
         //User Input
         launchButton.setOnAction(e -> {
+
             Stone tempStone = player[currentPlayer].getStoneList()[currentStone.getValue()];
             try {
-                tempStone.startMoving(Integer.parseInt(energyField.getText()), Integer.parseInt(angleField.getText()), stones1, stones2, tempStone);
+                value = Double.parseDouble(energyField.getText());
+                if(value > 500){
+                    statusLabel.setText("Value cannot be more than 500!");
+                    value = 500;
+                }
+                tempStone.startMoving(value, Integer.parseInt(angleField.getText()), stones1, stones2, tempStone);
             }catch(NumberFormatException nfe){
                 try {
-                    tempStone.startMoving(Integer.parseInt(energyField.getText()), 0, stones1, stones2, tempStone);
+                    tempStone.startMoving(value, 0, stones1, stones2, tempStone);
                 }catch(NumberFormatException nfe2){
                     tempStone.startMoving(0,0,stones1,stones2,tempStone);
                 }
@@ -261,11 +273,11 @@ public class Board extends Application {
             if(currentPlayer == 1){
                 currentStone.set(currentStone.getValue()+1);
                 currentPlayer = 0;
-                statusLabel.setText("Player 1's Turn");
+                statusLabel.setText(player1Name+"'s Turn");
                 statusLabel.setTextFill(Color.DARKBLUE);
             }else {
                 currentPlayer = 1;
-                statusLabel.setText("Player 2's Turn");
+                statusLabel.setText(player2Name+"'s Turn");
                 statusLabel.setTextFill(Color.RED);
             }
             try {
@@ -319,16 +331,16 @@ public class Board extends Application {
 
         player1.setPointsTotal(target.calculatePoints(stones1));
         player2.setPointsTotal(target.calculatePoints(stones2));
-        statusLabel.setText("Player 1: " + player1.getPointsTotal() + " points\tPlayer 2: " + player2.getPointsTotal() + " points");
+        statusLabel.setText(player1Name+": " + player1.getPointsTotal() + " points\t"+player2Name+": " + player2.getPointsTotal() + " points");
 
         int winner;
         if(player1.getPointsTotal() > player2.getPointsTotal()) {
             winningLabel.setTextFill(Color.BLUE);
-            winningLabel.setText("Player 1 WINS!");
+            winningLabel.setText(player1Name+" WINS!");
         }
         else if(player1.getPointsTotal() < player2.getPointsTotal()){
             winningLabel.setTextFill(Color.RED);
-            winningLabel.setText("Player 2 WINS!");
+            winningLabel.setText(player2Name+" WINS!");
         }
         else{
             winningLabel.setTextFill(Color.BLACK);
@@ -339,7 +351,27 @@ public class Board extends Application {
             stones2[i].setSpeedKEnergy(0);
         }
     }
-    private class Border{
+    public void setPlayerNames(String player1, String player2){
+        this.player1Name = player1;
+        this.player2Name = player2;
+    }
+    public static abstract class After extends Thread {
 
+        private int sleep = 0;
+
+        public After(int sleep) {
+            this.sleep = sleep;
+        }
+
+        public void run() {
+            try {
+                Thread.sleep(this.sleep);
+            } catch(InterruptedException e) {
+                //do something with e
+            }
+            this.after();
+        }
+
+        public abstract void after();
     }
 }

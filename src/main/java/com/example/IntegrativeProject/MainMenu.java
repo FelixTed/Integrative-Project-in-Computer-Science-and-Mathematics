@@ -86,8 +86,10 @@ public class MainMenu extends Application {
                 stage.close();
                 Stage s = new Stage();
                 try {
-                    new Board().start(s);
+                    new NameSelectionMenu().start(s);
                 } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
 

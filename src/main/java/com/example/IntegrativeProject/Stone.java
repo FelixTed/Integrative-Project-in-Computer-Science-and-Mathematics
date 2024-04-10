@@ -49,6 +49,10 @@ public class Stone extends Circle implements Runnable{
     public void startMoving(double kEnergy, double angle, Stone[] stones1, Stone[] stones2, Stone thisStone){
         this.stones1 = stones1;
         this.stones2 = stones2;
+        //Temporary fix for the bug happening at 150 J since we cannot find the cause
+        if(kEnergy == 150){
+            kEnergy = 149.9;
+        }
         this.setSpeedKEnergy(kEnergy);
         this.angle = angle;
         if(this.angle < 0)
@@ -59,7 +63,7 @@ public class Stone extends Circle implements Runnable{
 
         //Each keyframe calculates the movement of the stone based on speed and angle then updates speed. Also check for collisions
         KeyFrame keyframe = new KeyFrame(Duration.millis(keyFrameTimeIntervalMillis), e ->{
-            System.out.println(this.getPlayerID() + " " + this.getCenterX() + " " + this.getCenterY()+ " " + this.speed);
+            System.out.println(this.getPlayerID() + " " + this.getAngle());
             this.setMoving(true);
             double movement = 100*thisStone.getSpeed() * keyFrameTimeIntervalMillis/1000;
             thisStone.setCenterX(thisStone.getCenterX() + (movement*Math.cos(Math.toRadians(this.angle))));
@@ -186,31 +190,6 @@ public class Stone extends Circle implements Runnable{
         return 0.5*this.MASS*Math.pow(this.getSpeed(),2);
     }
 
-    /*public void checkCollision(Stone stone){
-        if(this.checkOverlap(stone) && stone.isActive()){
-            this.movementTimeline.stop();
-            stone.movementTimeline.stop();
-            System.out.println("COLLISION!");
-
-            this.setSpeed((speed/2));
-            stone.setSpeed(speed/2);
-System.out.println(Math.atan((this.getCenterY()-stone.getCenterY())/(this.getCenterX()-stone.getCenterX()))+180);
-            this.setAngle(Math.atan((this.getCenterY()-stone.getCenterY())/(this.getCenterX()-stone.getCenterX()))+180);
-            stone.setAngle(Math.atan((this.getCenterY()-stone.getCenterY())/(this.getCenterX()-stone.getCenterX())));
-
-
-            System.out.println("Angle "+getAngle() + "Speed " + getSpeed() + "K  " + getKEnergy());
-
-            Thread thread1 = new Thread(this);
-            Thread thread2 = new Thread(stone);
-
-            thread1.start();
-            thread2.start();
-
-            *//*this.startMoving(100,this.getAngle(),stones1,stones2,this);
-            stone.startMoving(100,stone.getAngle(),stones1,stones2,stone);*//*
-        }
-    }*/
 
     private boolean checkOverlap(Stone circle) {
         double xDiff = this.getCenterX() - circle.getCenterX();
