@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MainMenu extends Application {
+
     @Override
     public void start(Stage stage) throws IOException {
         // Basic menu screen
@@ -60,8 +61,8 @@ public class MainMenu extends Application {
             iVDrawing.setFitWidth(90);
 
             Label title = new Label("CurlingFx");
-            title.setFont(new Font("Times New Roman", 48));
-            title.setTranslateX(440);
+
+            title.setTranslateX(430);
             title.setTranslateY(100);
 
             iVPlay.setFitHeight(90);
@@ -119,139 +120,13 @@ public class MainMenu extends Application {
 
 
         Scene scene = new Scene(pane,1024, 576);
-        stage.setTitle("Hello!");
+        stage.setTitle("Main Menu");
         stage.setResizable(false);
+        scene.getStylesheets().add(getClass().getResource("/fontstyle.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
     }
-private void launchGameApplication(String appType){
-        Stage newStage = new Stage();
-        newStage.setTitle("New application");
-    Pane newPane = new Pane();
-    if(appType == "game") {
-        Circle stone1 = new Circle(100, 400, 50);
-        Image stoneImg = new Image("C:/Users/Dell/Pictures/blueStone.png");
 
-        Image backGroundIm = new Image("C:/Users/Dell/Pictures/gameBackground.jpg");
-        BackgroundImage bGIMG = new BackgroundImage(backGroundIm, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-
-        Background background = new Background(bGIMG);
-
-        newPane.setBackground(background);
-        ImageView stoneView = new ImageView(stoneImg);
-        stoneView.setFitWidth(101);
-        stoneView.setFitHeight(97);
-        stoneView.setTranslateX(50);
-        stoneView.setTranslateY(350);
-
-        Circle wholeInner = new Circle(1200, 400, 30);
-        Circle insideInner = new Circle(1200, 400, 15);
-
-
-        Shape donut1 = Shape.subtract(wholeInner, insideInner);
-        donut1.setFill(Color.RED);
-
-        Circle wholeMid = new Circle(1200, 400, 60);
-        Circle insideMid = new Circle(1200, 400, 30);
-        insideMid.setFill(Color.TRANSPARENT);
-
-        Shape donut2 = Shape.subtract(wholeMid, insideMid);
-        donut2.setFill(Color.LIGHTGRAY);
-
-        Circle wholeOuter = new Circle(1200, 400, 90);
-        Circle insideOuter = new Circle(1200, 400, 60);
-        insideOuter.setFill(Color.TRANSPARENT);
-
-        Shape donut3 = Shape.subtract(wholeOuter, insideOuter);
-        donut3.setFill(Color.BLUE);
-
-        HBox hBox = new HBox();
-        hBox.setPadding(new Insets(50));
-
-        Label lbl1 = new Label("Kinetic Energy: ");
-        TextField tF1 = new TextField();
-        Label lbl2 = new Label("Angle: ");
-        TextField tF2 = new TextField();
-        Button Launch = new Button("Launch");
-        hBox.getChildren().addAll(lbl1, tF1, lbl2, tF2, Launch);
-
-        hBox.setTranslateX(50);
-        hBox.setTranslateY(600);
-
-
-        Label Turn = new Label("Player 1's turn");
-        Turn.setFont(Font.font("Times New Roman", 32));
-        Turn.setTranslateX(30);
-        Turn.setTranslateY(30);
-
-        Rectangle innerRect = new Rectangle(25, 175, 1350, 450);
-        innerRect.setFill(Color.LIGHTCYAN);
-        innerRect.setStroke(Color.BLACK);
-
-        Line normal = new Line(150, 400, 250, 400);
-        normal.getStrokeDashArray().addAll(4d);
-        newPane.getChildren().addAll(innerRect, stone1, stoneView, donut1, donut2, donut3, hBox, Turn, normal);
-        Scene gameScene = new Scene(newPane, 1440, 720);
-        newStage.setScene(gameScene);
-        newStage.show();
-    }else if(appType == "info"){
-        Image menuButt = new Image("C:/Users/Dell/Downloads/MenuButton.png");
-        ImageView menuButtView = new ImageView(menuButt);
-        menuButtView.setTranslateX(70);
-        menuButtView.setTranslateY(700);
-        menuButtView.setFitHeight(90);
-        menuButtView.setFitWidth(192);
-        VBox physicsBox = new VBox(15);
-
-        Image collImage = new Image("C:/Users/Dell/Pictures/Collisions.png");
-        ImageView collView = new ImageView(collImage);
-        Image displacementImage = new Image("C:/Users/Dell/Pictures/DisplacementTrig.png");
-        ImageView displacementView = new ImageView(displacementImage);
-
-        displacementView.setFitWidth(340);
-        displacementView.setFitHeight(224);
-        collView.setFitHeight(224);
-        collView.setFitWidth(340);
-        physicsBox.getChildren().addAll(displacementView,collView);
-        physicsBox.setTranslateX(1175);
-        physicsBox.setTranslateY(200);
-        Label lblTitle = new Label("Physics Info");
-        lblTitle.setFont(Font.font("Times New Roman",32));
-        lblTitle.setTranslateX(700);
-        lblTitle.setTranslateY(50);
-
-
-        Image backGroundIm = new Image("C:/Users/Dell/Pictures/gameBackground.jpg");
-        BackgroundImage bGIMG = new BackgroundImage(backGroundIm, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-
-        Background background = new Background(bGIMG);
-
-        newPane.setBackground(background);
-
-        Image physics = new Image("C:/Users/Dell/Pictures/physics.png");
-
-        ImageView imgViewPhysics = new ImageView(physics);
-
-
-        HBox sliderBox = new HBox();
-
-        Slider slider = new Slider();
-        slider.setOrientation(Orientation.VERTICAL);
-
-        sliderBox.getChildren().addAll(imgViewPhysics,slider);
-
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setContent(sliderBox);
-        scrollPane.setTranslateX(400);
-        scrollPane.setTranslateY(100);
-
-        newPane.getChildren().addAll(scrollPane,lblTitle,menuButtView,physicsBox);
-        Scene infoScene = new Scene(newPane, 1550, 800);
-        newStage.setScene(infoScene);
-        newStage.show();
-    }
-
-}
     public static void main(String[] args) {
         launch();
     }

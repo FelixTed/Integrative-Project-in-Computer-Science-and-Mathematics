@@ -13,7 +13,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-public class Stone extends Circle implements Runnable{
+public class Stone extends Circle{
     //Variable data fields
     Timeline movementTimeline = new Timeline();
     private double speed;
@@ -203,14 +203,5 @@ public class Stone extends Circle implements Runnable{
         if(circle.getCenterX() == this.getCenterX() && circle.getCenterY() == this.getCenterY()){
             return false;
         }else return this.getBoundsInParent().intersects(circle.getBoundsInParent());
-    }
-
-    @Override
-    public void run() {
-        double movement = this.getSpeed() * keyFrameTimeIntervalMillis/1000;
-        this.setCenterX(this.getCenterX() + (movement*Math.cos(Math.toRadians(angle))));
-        this.setCenterY(this.getCenterY() - (movement*Math.sin(Math.toRadians(angle))));
-        this.setSpeed(this.getSpeed()-(FRICTIONCOEFFICIENT*9.81*(keyFrameTimeIntervalMillis/1000)));
-        this.startMoving(100,this.getAngle(),stones1,stones2,this);
     }
 }

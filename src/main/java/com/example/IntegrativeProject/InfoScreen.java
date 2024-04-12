@@ -28,23 +28,25 @@ public class InfoScreen extends Application {
         menuButtView.setFitWidth(192);
         VBox physicsBox = new VBox(15);
 
-        ImageView physicsArray[] = new ImageView[4];
+        ImageView physicsArray[] = new ImageView[5];
         Image collImage = new Image("Collisions.png");
         ImageView collView = new ImageView(collImage);
         Image displacementImage = new Image("DisplacementTrig.png");
         ImageView displacementView = new ImageView(displacementImage);
-        Image physics = new Image("physics.png");
+        Image physics = new Image("1 - kEnergy.png");
         ImageView imgViewPhysics1 = new ImageView(physics);
-        Image physics2 = new Image("ImgViewPhysics2.png");
+        Image physics2 = new Image("2 - friction.png");
         ImageView imgViewPhysics2 = new ImageView(physics2);
         Image nextButt = new Image("Next.png");
         ImageView nextButtView = new ImageView(nextButt);
         Image backButt = new Image("Back.png");
         ImageView backButtView = new ImageView(backButt);
-        Image physics3 = new Image("ImgViewPhysics3.png");
+        Image physics3 = new Image("3 - time.png");
         ImageView imgViewPhysics3 = new ImageView(physics3);
-        Image physics4 = new Image("ImgViewPhysics4.png");
+        Image physics4 = new Image("4 - movement.png");
         ImageView imgViewPhysics4 = new ImageView(physics4);
+        Image physics5 = new Image("5 - collisions.png");
+        ImageView imgViewPhysics5 = new ImageView(physics5);
 
         nextButtView.setFitWidth(100);
         nextButtView.setFitHeight(100);
@@ -56,17 +58,22 @@ public class InfoScreen extends Application {
         backButtView.setTranslateX(650);
         backButtView.setTranslateY(700);
 
-        imgViewPhysics1.setFitHeight(600);
-        imgViewPhysics1.setFitWidth(733);
+        int width = 1000;
+        int height = 600;
+        imgViewPhysics1.setFitHeight(height);
+        imgViewPhysics1.setFitWidth(width);
 
-        imgViewPhysics2.setFitHeight(600);
-        imgViewPhysics2.setFitWidth(733);
+        imgViewPhysics2.setFitHeight(height);
+        imgViewPhysics2.setFitWidth(width);
 
-        imgViewPhysics3.setFitHeight(600);
-        imgViewPhysics3.setFitWidth(733);
+        imgViewPhysics3.setFitHeight(height);
+        imgViewPhysics3.setFitWidth(width);
 
-        imgViewPhysics4.setFitHeight(600);
-        imgViewPhysics4.setFitWidth(733);
+        imgViewPhysics4.setFitHeight(height);
+        imgViewPhysics4.setFitWidth(width);
+
+        imgViewPhysics5.setFitHeight(height);
+        imgViewPhysics5.setFitWidth(width);
 
         displacementView.setFitWidth(340);
         displacementView.setFitHeight(224);
@@ -85,6 +92,7 @@ public class InfoScreen extends Application {
         physicsArray[1] = imgViewPhysics2;
         physicsArray[2] = imgViewPhysics3;
         physicsArray[3] = imgViewPhysics4;
+        physicsArray[4] = imgViewPhysics5;
 
         Image backGroundIm = new Image("gameBackground.jpg");
         BackgroundImage bGIMG = new BackgroundImage(backGroundIm, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
@@ -98,8 +106,8 @@ public class InfoScreen extends Application {
 
         HBox physicsPane = new HBox();
 
-        physicsPane.setTranslateX(400);
-        physicsPane.setTranslateY(100);
+        physicsPane.setTranslateX(150);
+        physicsPane.setTranslateY(95);
 
 
         physicsPane.getChildren().addAll(imgViewPhysics1);
@@ -146,6 +154,7 @@ public class InfoScreen extends Application {
 
         stage.setTitle("Hello!");
         stage.setScene(scene);
+        scene.getStylesheets().add(getClass().getResource("/fontstyle1.css").toExternalForm());
         stage.show();
     }
 

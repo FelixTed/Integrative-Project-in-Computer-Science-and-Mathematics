@@ -59,6 +59,9 @@ public class Board extends Application {
     public void start(Stage stage) throws IOException {
         //Setting correct name for user
         statusLabel.setText(player1Name+"'s turn");
+        statusLabel.getStyleClass().add("status");
+        winningLabel.getStyleClass().add("status");
+
         //Putting the borders of the game in a list
         Line[] borders = {leftBorder,upperBorder,rightBorder,lowerBorder};
 
@@ -117,8 +120,10 @@ public class Board extends Application {
         hBox.setPadding(new Insets(50));
 
         Label lbl1 = new Label("Kinetic Energy: ");
+        lbl1.getStyleClass().add("input");
 
         Label lbl2 = new Label("Angle: ");
+        lbl2.getStyleClass().add("input");
 
         hBox.getChildren().addAll(lbl1,energyField,lbl2,angleField,launchButton);
 
@@ -257,7 +262,7 @@ public class Board extends Application {
             tempStone.isMoving().addListener((e2,e3,value) ->{
                 if(value){
                         launchButton.setDisable(true);
-                }else if(endgame){
+                }else if(endgame && !value){
 
                     launchButton.setDisable(true);
                     try {
@@ -291,6 +296,7 @@ public class Board extends Application {
 
         stage.setTitle("Board");
         stage.setScene(scene);
+        scene.getStylesheets().add(getClass().getResource("/fontstyle2.css").toExternalForm());
         stage.setResizable(false);
         stage.initStyle(StageStyle.UTILITY);
         stage.show();
@@ -327,7 +333,8 @@ public class Board extends Application {
         winningLabel.setFont(new Font(50));
         statusLabel.setTextFill(Color.BLACK);
         winningLabel.setText("Calculating Points...");
-        //Thread.sleep(1000);
+
+        Thread.sleep(1000);
 
         player1.setPointsTotal(target.calculatePoints(stones1));
         player2.setPointsTotal(target.calculatePoints(stones2));

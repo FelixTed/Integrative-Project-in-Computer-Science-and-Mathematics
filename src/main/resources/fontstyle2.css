@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Days';
+    src: url('fonts/Days.ttf');
+}
+
+.status {
+    -fx-font-family: 'Days';
+    -fx-font-size: 30;
+}
+.input {
+    -fx-font-family: 'Days';
+    -fx-font-size: 20;
+}

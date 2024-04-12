@@ -80,6 +80,7 @@ public class NameSelectionMenu extends Application {
 
         pane.getChildren().addAll(player1Name,promptPlayer1,promptPlayer2,player2Name,iVPlay);
         Scene infoScene = new Scene(pane, 1024, 576);
+        infoScene.getStylesheets().add(getClass().getResource("/fontstyle3.css").toExternalForm());
         stage.setScene(infoScene);
         stage.show();
     }
