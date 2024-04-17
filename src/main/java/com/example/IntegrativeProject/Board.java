@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -20,11 +19,10 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.io.IOException;
+import java.io.*;
 
 public class Board extends Application {
     // Data field
@@ -260,7 +258,10 @@ public class Board extends Application {
                     launchButton.setDisable(true);
                     try {
                         endGame();
+                        endgame = false;
                     } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
                 } else if (currentStone.getValue() != 4) {
@@ -326,7 +327,8 @@ public class Board extends Application {
     }
 
     // End the game and display the winner
-    public void endGame() throws InterruptedException {
+    public void endGame() throws InterruptedException, IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter("src//main//resources//playerData.txt",true));
         winningLabel.setFont(new Font(50));
         statusLabel.setTextFill(Color.BLACK);
         winningLabel.setText("Calculating Points...");
@@ -341,9 +343,11 @@ public class Board extends Application {
         if (player1.getPointsTotal() > player2.getPointsTotal()) {
             winningLabel.setTextFill(Color.BLUE);
             winningLabel.setText(player1Name + " WINS!");
+            writer.write(player1Name+"\n"+ player1.getPointsTotal() +"\n");
         } else if (player1.getPointsTotal() < player2.getPointsTotal()) {
             winningLabel.setTextFill(Color.RED);
             winningLabel.setText(player2Name + " WINS!");
+            writer.write(player2Name+"\n"+ player2.getPointsTotal() +"\n");
         } else {
             winningLabel.setTextFill(Color.BLACK);
             winningLabel.setText("Draw");
@@ -352,6 +356,8 @@ public class Board extends Application {
             stones1[i].setSpeedKEnergy(0);
             stones2[i].setSpeedKEnergy(0);
         }
+        writer.close();
+
     }
 
     // Set the names of the players

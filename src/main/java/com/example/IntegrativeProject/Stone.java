@@ -63,7 +63,6 @@ public class Stone extends Circle{
 
         //Each keyframe calculates the movement of the stone based on speed and angle then updates speed. Also check for collisions
         KeyFrame keyframe = new KeyFrame(Duration.millis(keyFrameTimeIntervalMillis), e ->{
-            System.out.println(this.getPlayerID() + " " + this.getAngle());
             this.setMoving(true);
             double movement = 100*thisStone.getSpeed() * keyFrameTimeIntervalMillis/1000;
             thisStone.setCenterX(thisStone.getCenterX() + (movement*Math.cos(Math.toRadians(this.angle))));
@@ -74,7 +73,6 @@ public class Stone extends Circle{
                 if(checkOverlap(stones1[i])){
                     if(thisStone.getCenterX()>stones1[i].getCenterX())
                         coefficient = 1;
-                    System.out.println("COLLISION! " + Math.toDegrees(Math.atan((thisStone.getCenterY()-stones1[i].getCenterY())/(thisStone.getCenterX()-stones1[i].getCenterX()))));
                     thisStone.setAngle(coefficient*180+(180+Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones1[i].getCenterY())/(thisStone.getCenterX()-stones1[i].getCenterX())))));
                     stones1[i].setAngle(coefficient*180+Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones1[i].getCenterY())/(thisStone.getCenterX()-stones1[i].getCenterX()))));
 
@@ -93,7 +91,6 @@ public class Stone extends Circle{
                 if(checkOverlap(stones2[i])){
                     if(thisStone.getCenterX()>stones2[i].getCenterX())
                         coefficient = 1;
-                    System.out.println("COllision!" +Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones2[i].getCenterY())/(thisStone.getCenterX()-stones2[i].getCenterX()))));
                     thisStone.setAngle(coefficient*180+(180+Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones2[i].getCenterY())/(thisStone.getCenterX()-stones2[i].getCenterX())))));
                     stones2[i].setAngle(coefficient*180+Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones2[i].getCenterY())/(thisStone.getCenterX()-stones2[i].getCenterX()))));
 

@@ -38,6 +38,8 @@ public class MainMenu extends Application {
 
             Image iMInfo = new Image("InfoSquareButton.png");
 
+            Image iMBoard = new Image("BoardButton.png");
+
 
             ImageView iVPlay = new ImageView();
 
@@ -47,10 +49,13 @@ public class MainMenu extends Application {
 
             ImageView iVInfo = new ImageView();
 
+            ImageView iVBoard = new ImageView();
+
             iVDrawing.setImage(iMDrawing);
             iVPlay.setImage(iMPlay);
             iVExit.setImage(iMExitButton);
             iVInfo.setImage(iMInfo);
+            iVBoard.setImage(iMBoard);
 
 
             iVDrawing.setFitHeight(168);
@@ -80,7 +85,10 @@ public class MainMenu extends Application {
             iVInfo.setTranslateY(500);
             iVInfo.setTranslateX(30);
 
-
+            iVBoard.setFitWidth(50);
+            iVBoard.setFitHeight(50);
+            iVBoard.setTranslateY(500);
+            iVBoard.setTranslateX(90);
 
             // Handler which launches either game or information application
             iVPlay.setOnMouseClicked(e->{
@@ -104,11 +112,22 @@ public class MainMenu extends Application {
                     throw new RuntimeException(ex);
                 }
             });
+            iVBoard.setOnMouseClicked(e->{
+                stage.close();
+                Stage s = new Stage();
+                try{
+                    new Leaderboard().start(s);
+                }catch(IOException ex){
+                    throw new RuntimeException();
+                }catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
             iVExit.setOnMouseClicked(e->{
                 stage.close();
 
             });
-            pane.getChildren().addAll(title,iVPlay,iVDrawing,iVExit, iVInfo);
+            pane.getChildren().addAll(title,iVPlay,iVDrawing,iVExit, iVInfo,iVBoard);
 
 
         }catch(Exception e){
