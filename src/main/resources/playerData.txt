@@ -26,3 +26,7 @@ David
 100
 Garfield
 100
+Rami
+100
+Dave
+125
