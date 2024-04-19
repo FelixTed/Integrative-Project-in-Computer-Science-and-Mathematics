@@ -134,10 +134,6 @@ public class MainMenu extends Application {
             e.printStackTrace();
         }
 
-
-
-
-
         Scene scene = new Scene(pane,1024, 576);
         stage.setTitle("Main Menu");
         stage.setResizable(false);

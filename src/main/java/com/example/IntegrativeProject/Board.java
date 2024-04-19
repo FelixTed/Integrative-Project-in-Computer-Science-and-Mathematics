@@ -257,6 +257,7 @@ public class Board extends Application {
 
                     launchButton.setDisable(true);
                     try {
+                        System.out.println("Endgame 1");
                         endGame();
                         endgame = false;
                     } catch (InterruptedException ex) {

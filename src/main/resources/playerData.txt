@@ -30,3 +30,5 @@ Rami
 100
 Dave
 125
+player 1
+50

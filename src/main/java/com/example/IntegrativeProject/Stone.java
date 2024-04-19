@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -69,44 +70,13 @@ public class Stone extends Circle{
             thisStone.setCenterY(thisStone.getCenterY() - (movement*Math.sin(Math.toRadians(this.angle))));
             thisStone.setSpeed(thisStone.getSpeed()-(FRICTIONCOEFFICIENT*9.81*(keyFrameTimeIntervalMillis/1000)));
             for(int i = 0; i < stones1.length;i++){
-                int coefficient = 0;
                 if(checkOverlap(stones1[i])){
-                    if(thisStone.getCenterX()>stones1[i].getCenterX())
-                        coefficient = 1;
-                    thisStone.setAngle(coefficient*180+(180+Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones1[i].getCenterY())/(thisStone.getCenterX()-stones1[i].getCenterX())))));
-                    stones1[i].setAngle(coefficient*180+Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones1[i].getCenterY())/(thisStone.getCenterX()-stones1[i].getCenterX()))));
-
-                    double tempMovement = 1*thisStone.getSpeed() * keyFrameTimeIntervalMillis/1000;
-                    thisStone.setCenterX(thisStone.getCenterX() + (tempMovement*Math.cos(Math.toRadians(this.angle))));
-                    thisStone.setCenterY(thisStone.getCenterY() - (tempMovement*Math.sin(Math.toRadians(this.angle))));
-                    stones1[i].setCenterX(stones1[i].getCenterX() + (tempMovement*Math.cos(Math.toRadians(stones1[i].getAngle()))));
-                    stones1[i].setCenterY(stones1[i].getCenterY() - (tempMovement*Math.sin(Math.toRadians(stones1[i].getAngle()))));
-
-                    thisStone.setSpeedKEnergy((thisStone.getKEnergy()/2));
-                    stones1[i].startMoving(thisStone.getKEnergy(),stones1[i].angle,stones1,stones2,stones1[i]);
-                    thisStone.setSpeedKEnergy(this.getKEnergy()-0.3* thisStone.getKEnergy());
-
+                    onCollision(thisStone,i,stones1,stones2);
 
                 }
                 if(checkOverlap(stones2[i])){
-                    if(thisStone.getCenterX()>stones2[i].getCenterX())
-                        coefficient = 1;
-                    thisStone.setAngle(coefficient*180+(180+Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones2[i].getCenterY())/(thisStone.getCenterX()-stones2[i].getCenterX())))));
-                    stones2[i].setAngle(coefficient*180+Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones2[i].getCenterY())/(thisStone.getCenterX()-stones2[i].getCenterX()))));
-
-                    double tempMovement = 1*thisStone.getSpeed() * keyFrameTimeIntervalMillis/1000;
-                    thisStone.setCenterX(thisStone.getCenterX() + (tempMovement*Math.cos(Math.toRadians(this.angle))));
-                    thisStone.setCenterY(thisStone.getCenterY() - (tempMovement*Math.sin(Math.toRadians(this.angle))));
-                    stones2[i].setCenterX(stones2[i].getCenterX() + (tempMovement*Math.cos(Math.toRadians(stones2[i].getAngle()))));
-                    stones2[i].setCenterY(stones2[i].getCenterY() - (tempMovement*Math.sin(Math.toRadians(stones2[i].getAngle()))));
-
-
-                    thisStone.setSpeedKEnergy((thisStone.getKEnergy()/2));
-                    stones2[i].startMoving(thisStone.getKEnergy(),stones2[i].angle,stones1,stones2,stones2[i]);
-                    thisStone.setSpeedKEnergy(this.getKEnergy()-0.3* thisStone.getKEnergy());
+                    onCollision(thisStone,i,stones2,stones1);
                 }
-
-
             }
             for(int i = 0; i<borders.length;i++){
                 if(thisStone.intersects(borders[i].getBoundsInLocal())){
@@ -119,10 +89,10 @@ public class Stone extends Circle{
                 }
             }
             if(thisStone.getSpeed() <= 0){
-                this.setMoving(false);
-                if(thisStone.getCenterX() <250){
-                    this.setActive(false);
-                    this.setFill(null);
+                thisStone.setMoving(false);
+                if(thisStone.getCenterX() < 250){
+                    thisStone.setFill(Color.TRANSPARENT);
+                    thisStone.setActive(false);
                 }
                 movementTimeline.stop();
             }
@@ -200,5 +170,23 @@ public class Stone extends Circle{
         if(circle.getCenterX() == this.getCenterX() && circle.getCenterY() == this.getCenterY()){
             return false;
         }else return this.getBoundsInParent().intersects(circle.getBoundsInParent());
+    }
+    public void onCollision(Stone thisStone,int i, Stone[] stones1, Stone[] stones2){
+        int coefficient = 0;
+        if(thisStone.getCenterX()>stones1[i].getCenterX())
+            coefficient = 1;
+        thisStone.setAngle(coefficient*180+(180+Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones1[i].getCenterY())/(thisStone.getCenterX()-stones1[i].getCenterX())))));
+        stones1[i].setAngle(coefficient*180+Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones1[i].getCenterY())/(thisStone.getCenterX()-stones1[i].getCenterX()))));
+
+        double tempMovement = 1*thisStone.getSpeed() * keyFrameTimeIntervalMillis/1000;
+        thisStone.setCenterX(thisStone.getCenterX() + (tempMovement*Math.cos(Math.toRadians(this.angle))));
+        thisStone.setCenterY(thisStone.getCenterY() - (tempMovement*Math.sin(Math.toRadians(this.angle))));
+        stones1[i].setCenterX(stones1[i].getCenterX() + (tempMovement*Math.cos(Math.toRadians(stones1[i].getAngle()))));
+        stones1[i].setCenterY(stones1[i].getCenterY() - (tempMovement*Math.sin(Math.toRadians(stones1[i].getAngle()))));
+
+        thisStone.setSpeedKEnergy((thisStone.getKEnergy()/2));
+        stones1[i].startMoving(thisStone.getKEnergy(),stones1[i].angle,stones1,stones2,stones1[i]);
+        thisStone.setSpeedKEnergy(this.getKEnergy()-0.3* thisStone.getKEnergy());
+
     }
 }
