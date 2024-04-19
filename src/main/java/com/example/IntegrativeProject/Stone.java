@@ -179,14 +179,14 @@ public class Stone extends Circle{
         stones1[i].setAngle(coefficient*180+Math.toDegrees(Math.atan(-(thisStone.getCenterY()-stones1[i].getCenterY())/(thisStone.getCenterX()-stones1[i].getCenterX()))));
 
         double tempMovement = 1*thisStone.getSpeed() * keyFrameTimeIntervalMillis/1000;
-        thisStone.setCenterX(thisStone.getCenterX() + (tempMovement*Math.cos(Math.toRadians(this.angle))));
-        thisStone.setCenterY(thisStone.getCenterY() - (tempMovement*Math.sin(Math.toRadians(this.angle))));
+        thisStone.setCenterX(thisStone.getCenterX() + (tempMovement*Math.cos(Math.toRadians(thisStone.angle))));
+        thisStone.setCenterY(thisStone.getCenterY() - (tempMovement*Math.sin(Math.toRadians(thisStone.angle))));
         stones1[i].setCenterX(stones1[i].getCenterX() + (tempMovement*Math.cos(Math.toRadians(stones1[i].getAngle()))));
         stones1[i].setCenterY(stones1[i].getCenterY() - (tempMovement*Math.sin(Math.toRadians(stones1[i].getAngle()))));
 
         thisStone.setSpeedKEnergy((thisStone.getKEnergy()/2));
         stones1[i].startMoving(thisStone.getKEnergy(),stones1[i].angle,stones1,stones2,stones1[i]);
-        thisStone.setSpeedKEnergy(this.getKEnergy()-0.3* thisStone.getKEnergy());
+        thisStone.setSpeedKEnergy(thisStone.getKEnergy()-0.3* thisStone.getKEnergy());
 
     }
 }

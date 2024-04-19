@@ -32,3 +32,7 @@ Dave
 125
 player 1
 50
+player 1
+100
+player 1
+100

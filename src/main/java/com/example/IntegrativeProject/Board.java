@@ -239,7 +239,7 @@ public class Board extends Application {
                     statusLabel.setText("Value cannot be more than 500!");
                     value = 500;
                 }
-                tempStone.startMoving(value, Integer.parseInt(angleField.getText()), stones1, stones2, tempStone);
+                tempStone.startMoving(value, Double.parseDouble(angleField.getText()), stones1, stones2, tempStone);
             } catch (NumberFormatException nfe) {
                 try {
                     tempStone.startMoving(value, 0, stones1, stones2, tempStone);
@@ -300,7 +300,7 @@ public class Board extends Application {
     // Modify the length of the line based on the value in energyField
     public void drawLength() {
         try {
-            int inputtedLength = Integer.parseInt(energyField.getText());
+            double inputtedLength = Double.parseDouble(energyField.getText());
             if (inputtedLength < 30)
                 lineLength = 1.75 * 30;
             else if (inputtedLength > 300)
@@ -317,7 +317,7 @@ public class Board extends Application {
     // Draw the angle of the line based on the value in angleField
     public void drawAngle() {
         try {
-            double angleRad = Math.toRadians(Integer.parseInt(angleField.getText()));
+            double angleRad = Math.toRadians(Double.parseDouble(angleField.getText()));
             angleLine.setEndX(100 + lineLength * Math.cos(angleRad));
             angleLine.setEndY(380 - lineLength * Math.sin(angleRad));
         } catch (NumberFormatException nfe) {
